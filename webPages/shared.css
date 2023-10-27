@@ -1,0 +1,369 @@
+body {
+    background-color:#eee;
+height: 100vh;
+    /* 100% of the viewport height */
+    width: 100%;
+margin: 0%;
+padding: 0;
+background-size: cover;
+    /* padding: 0; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    min-height: 100vh;
+    /* flex-direction: row; */
+    background-size: cover;
+    background-position: center;
+
+}
+
+.bg-continer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+}
+
+
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+
+
+header {
+    direction: rtl;
+    width: 100%;
+    position: relative;
+   height: 25%;
+    background-color: #eee;
+
+}
+
+header img {
+
+    /* float: right; */
+    /* position: absolute; */
+    width: 100px;
+    height: auto;
+    bottom: 0%;
+
+    top: 10px;
+    /* Adjust the top position as needed */
+    right: 0;
+    /* Adjust the right position as needed */
+
+}
+
+.warper {
+    /* background-color: #212020; */
+padding: 1%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #9cb4cc9e;
+    background-color: #9cb4cc63;
+    /* background-color: #e8e5e5; */
+    justify-content: center;
+    margin: 0px;
+    /* padding-bottom: 50%; */
+
+}
+
+.warper h1{
+
+    font-size: 3rem;
+    font-weight: bolder;
+    color: #375E98;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+
+
+.continer {
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    /* background-color: #9cb4cca4; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.box {
+    font-weight: lighter;
+    padding-top: 1%;
+    color: white;
+
+    border: 1px #212020 outset;
+    border-color: black;
+
+    border-radius: 8pt;
+    text-align: center;
+    margin: 16pt;
+    height: 200px;
+    width: 200px;
+    background-color: #375E98
+}
+
+.box button {
+
+    font-size: medium;
+    font-weight: bold;
+    color: #375E98;
+    background-color: white;
+    border-color: #9cb4cc;
+    border-radius: 8px;
+    margin: 1%;
+    width: 84%;
+}
+
+
+/* nav menu */
+.vertical-menu {
+    direction: rtl;
+    height: 100vh;
+    margin-top: 0;
+    width: 25%;
+    /* height:900px; */
+    /* Set a width if you like */
+}
+
+.vertical-menu a {
+    border: #375E98 1px outset;
+    background-color: #eee;
+    /* Grey background color */
+    color: black;
+    /* Black text color */
+    display: block;
+    /* Make the links appear below each other */
+    padding: 12px;
+    /* Add some padding */
+    text-decoration: none;
+    /* Remove underline from links */
+}
+
+.vertical-menu a:hover {
+    background-color: #ccc;
+    /* Dark grey background on mouse-over */
+}
+
+.vertical-menu a.active {
+    background-color: #819abe;
+    /* Add a green color to the "active/current" link */
+    color: white;
+}
+table,td,th, tr{
+   text-align: center;
+    direction: rtl;
+    
+   
+}
+/* students page+ advisors  */
+.stu_email{
+    direction: ltr;
+}
+th{
+    background-color: #375E98;
+    color: #fff;
+}
+table, td, th, tr{
+
+    padding: 1%;
+}
+
+
+td,th,table{
+border: #212020 1px solid;
+border-collapse: collapse;
+}
+table{
+    background: #eee;
+    padding: 1%;
+    height: min-content;
+    width: 80%;
+}
+/* log out */
+#logout{
+    width: max-content;
+    font-weight:600;
+    font-size: 1em;
+    color: #375E98;
+    display: flex;
+ direction: rtl;
+ justify-content: center;
+    flex-direction: row;
+    align-items:center;
+    direction: ltr;
+    width: 10%;
+    border: #375E98 2px solid;
+    border-radius: 8px;
+  padding: 0.5%;
+    margin-top: 5%;
+    margin-left: 1%;
+    float: left;
+}
+#logout span img{
+    margin: 1px;
+   width: min-content; 
+}
+#logout:hover{
+    border:#819abe 2px solid;
+    background-color: #819abe;
+        transition: 0.7s;
+        color: #fff;
+}
+/* hovering btn card buttons  */
+.btn_card:hover{
+   
+        background-color: #819abe;
+        transition: 0.7s;
+        color: #fff;
+}
+
+
+
+
+/* add students  */
+#stu_file{
+    background-color: #fff;
+ width: 100%;   
+ margin-left: auto;
+margin-bottom: 10px;
+ margin-right: auto;
+  height: 40%;
+  display: flex;
+  cursor: pointer;
+  /* margin: 30px 16px; */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px dashed #375E98;
+}
+form i {
+    color:#6990F2;
+    font-size: 50px;
+}
+#file_hint{
+    margin-top: 15px;
+        font-size: 16px;
+}
+#stu_header{
+    width: fit-content;
+    height: fit-content;
+    background-color: transparent;
+ /* padding-bottom: 1%; */
+margin-left: auto;
+margin-right: auto;
+    direction: rtl;
+    /* position:absolute; */
+    /* position: relative; */
+    background-color:none;
+    color:#375E98;
+        font-size: 1.75rem;
+        font-weight: 600;
+        text-align: center;
+}
+section .row {
+    
+    margin-bottom: 10px;
+    background: #E9F0FF;
+    list-style: none;
+    padding: 15px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+section .row i {
+    color: #6990F2;
+    font-size: 30px;
+}
+
+section .details span {
+    font-size: 14px;
+}
+
+.progress-area .row .content {
+    width: 100%;
+    margin-right: 15px;
+}
+
+.progress-area .details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+    justify-content: space-between;
+}
+
+.progress-area .content .progress-bar {
+    height: 6px;
+    width: 100%;
+    margin-bottom: 4px;
+    background: #fff;
+    border-radius: 30px;
+}
+
+.content .progress-bar .progress {
+    height: 100%;
+    width: 0%;
+    background: #6990F2;
+    border-radius: inherit;
+}
+
+.uploaded-area {
+    max-height: auto;
+    overflow-y: scroll;
+}
+
+.uploaded-area.onprogress {
+    max-height: 150px;
+}
+
+.uploaded-area::-webkit-scrollbar {
+    width: 0px;
+}
+
+.uploaded-area .row .content {
+    display: flex;
+    align-items: center;
+}
+
+.uploaded-area .row .details {
+    display: flex;
+    margin-right: 15px;
+    flex-direction: column;
+}
+
+.uploaded-area .row .details .size {
+    direction: ltr;
+    color: #404040;
+    font-size: 11px;
+}
+
+.uploaded-area i.fa-check {
+    font-size: 16px;
+}
+.wrap_stu{
+   direction: rtl;
+    display: flex;
+    flex-direction: column;
+    width: 430px;
+        background: #fff;
+        border-radius: 5px;
+        padding: 30px;
+        box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
+}
