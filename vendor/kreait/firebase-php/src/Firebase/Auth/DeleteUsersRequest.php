@@ -6,36 +6,32 @@ namespace Kreait\Firebase\Auth;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Uid;
+use Stringable;
 
+/**
+ * @internal
+ */
 final class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;
 
-    private string $projectId;
-    /** @var string[] */
-    private array $uids;
-    private bool $enabledUsersShouldBeForceDeleted;
-
-    /**
-     * @param string[] $uids
-     */
-    private function __construct(string $projectId, array $uids, bool $enabledUsersShouldBeForceDeleted)
-    {
-        $this->projectId = $projectId;
-        $this->uids = $uids;
-        $this->enabledUsersShouldBeForceDeleted = $enabledUsersShouldBeForceDeleted;
+    private function __construct(
+        /** @var list<string> $uids */
+        private readonly array $uids,
+        private readonly bool $enabledUsersShouldBeForceDeleted,
+    ) {
     }
 
     /**
-     * @param iterable<Uid|string> $uids
+     * @param iterable<Stringable|string> $uids
      */
-    public static function withUids(string $projectId, iterable $uids, bool $forceDeleteEnabledUsers = false): self
+    public static function withUids(iterable $uids, bool $forceDeleteEnabledUsers = false): self
     {
         $validatedUids = [];
         $count = 0;
 
         foreach ($uids as $uid) {
-            $validatedUids[] = (string) (\is_string($uid) ? new Uid(\trim($uid)) : $uid);
+            $validatedUids[] = Uid::fromString($uid)->value;
             ++$count;
 
             if ($count > self::MAX_BATCH_SIZE) {
@@ -43,12 +39,7 @@ final class DeleteUsersRequest
             }
         }
 
-        return new self($projectId, $validatedUids, $forceDeleteEnabledUsers);
-    }
-
-    public function projectId(): string
-    {
-        return $this->projectId;
+        return new self($validatedUids, $forceDeleteEnabledUsers);
     }
 
     /**

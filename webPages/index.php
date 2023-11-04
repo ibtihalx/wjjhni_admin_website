@@ -27,6 +27,7 @@ session_start();
 
         <div class="form-box login">
             <h2>تسجيل الدخول</h2>
+            <div>hello</div>
             <form action="logincode.php" method="post">
                 <div class="input-box">
 

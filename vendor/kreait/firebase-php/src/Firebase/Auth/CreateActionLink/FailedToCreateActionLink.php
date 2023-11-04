@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\CreateActionLink;
 
+use Beste\Json;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Exception\FirebaseException;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
@@ -21,8 +21,8 @@ final class FailedToCreateActionLink extends RuntimeException implements Firebas
         $fallbackMessage = 'Failed to create action link';
 
         try {
-            $message = JSON::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (InvalidArgumentException $e) {
+            $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
+        } catch (InvalidArgumentException) {
             $message = $fallbackMessage;
         }
 
