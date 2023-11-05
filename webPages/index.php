@@ -1,6 +1,12 @@
 
 <?php
+
 session_start();
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +18,8 @@ session_start();
     <title>login registration</title>
     <link rel="stylesheet" type="text/css" href="login.css">
 
-</head>
+
+
 
 
 </head>
@@ -27,8 +34,9 @@ session_start();
 
         <div class="form-box login">
             <h2>تسجيل الدخول</h2>
-            <div>hello</div>
-            <form action="logincode.php" method="post">
+            <br>
+            <div id="login_error_msg">كلمة المرور خاطئة أو البريد الإلكتروني خاطئ<br> الرجاء المحاولة مرة أخرى .</div>
+            <form action="login.php" method="post">
                 <div class="input-box">
 
                     <input name="email" type="email" required>
@@ -52,12 +60,21 @@ session_start();
             </form>
         </div>
     </div>
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
 
 
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
-
+    <?php 
+    if( $_SESSION["showError"]==true){
+    echo'<script>
+    // alert("hello");
+    document.getElementById("login_error_msg").style.display="block";
+    </script>';
+    session_destroy();
+}
+    
+    ?>
 </html>

@@ -194,3 +194,12 @@ header {
     cursor: pointer;
     z-index: 1;
 }
+#login_error_msg{
+   display:none;
+    direction: rtl;
+    color: white;
+    font-weight: bold;
+    background-color: rgb(136, 26, 26);
+    border-radius: 4px;
+    padding: 1%;
+}
