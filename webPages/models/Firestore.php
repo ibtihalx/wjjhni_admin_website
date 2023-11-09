@@ -22,11 +22,11 @@ class Firestore{
     private string $collectionName;
     private string $documentName;
 public function __construct(){
-    if (file_exists("models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json")) {
-    echo 'Key file exists.';
-} else {
-    echo 'Key file does not exist.';
-}
+//     if (file_exists("models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json")) {
+//     echo 'Key file exists.';
+// } else {
+//     echo 'Key file does not exist.';
+// }
     $this->firestore = new FirestoreClient([
         "keyFilePath"=>"models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json",
         "projectId"=>"wjjhni",
@@ -83,4 +83,24 @@ else{
     return $this->getDocment()->snapshot()->data();
 }
 }
+
+
+    /*
+    Get all documents from the collection
+    */
+    public function getAllDocuments(): array {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        $collection = $this->firestore->collection($this->collectionName);
+        $documents = [];
+
+        foreach ($collection->documents() as $document) {
+            $documents[] = $document->data();
+        }
+
+        return $documents;
+    }
+
 }
