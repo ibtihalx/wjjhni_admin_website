@@ -103,4 +103,21 @@ else{
         return $documents;
     }
 
+
+
+
+    public function checkDocumentExists(string $fieldName, $fieldValue): bool
+    {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        $collection = $this->firestore->collection($this->collectionName);
+
+        $query = $collection->where($fieldName, '=', $fieldValue);
+        $snapshot = $query->documents();
+
+        return !$snapshot->isEmpty();
+    }
+
 }

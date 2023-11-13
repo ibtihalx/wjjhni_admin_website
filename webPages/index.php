@@ -2,8 +2,8 @@
 <?php
 
 session_start();
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 1);
 
 
 
@@ -15,7 +15,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login registration</title>
+    <title>تسجيل الدخول</title>
     <link rel="stylesheet" type="text/css" href="login.css">
 
 
@@ -25,10 +25,7 @@ session_start();
 </head>
 
 <body>
-    <!-- <header>
-        <img  src="images/logo.png" alt="">
-
-    </header> -->
+   
 
     <div class="warper">
 
@@ -60,7 +57,7 @@ session_start();
             </form>
         </div>
     </div>
-    <!-- <script src="script.js"></script> -->
+    
 
 
 

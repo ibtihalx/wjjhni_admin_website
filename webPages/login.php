@@ -1,6 +1,7 @@
 <?php
 require '../vendor/autoload.php';
 use Firebase\Auth\Token\Exception\InvalidToken;
+use webPages\models\Firestore;
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
@@ -22,6 +23,13 @@ try{
    $idTokenString = $signInResult->idToken();
 
 try {
+        $f = new Firestore();
+       $f->setCollectionName('admin');
+        if(!$f->checkDocumentExists('email',$email)){
+         throw new Exception('not admin');
+
+        }
+
     $verifiedIdToken = $auth->verifyIdToken($idTokenString);
     $uid = $verifiedIdToken->claims()->get('sub');
     $_SESSION['verified_user_id']=$uid;
