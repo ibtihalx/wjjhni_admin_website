@@ -1,8 +1,11 @@
 <?php
 
 session_start();
-$_SESSION['page']='home.php';
- ?>
+$_SESSION['page'] = 'home.php';
+if (!isset($_SESSION['logged_in'])) {
+    header("Location: index.php");
+}
+?>
 
 <!DOCTYPE html>
 <html>
@@ -21,14 +24,14 @@ $_SESSION['page']='home.php';
 
     <header>
         <img src="images/logo.png" alt="logo">
-   <button id="logout">تسجيل الخروج
-    <span><img src="images/logout.svg"></span></button>
+        <button id="logout">تسجيل الخروج
+            <span><img src="images/logout.svg"></span></button>
 
     </header>
-<span></span>
-   
+    <span></span>
+
     <div class="bg-continer">
-        
+
 
 
 
@@ -54,8 +57,8 @@ $_SESSION['page']='home.php';
 
                     <h2> المرشدات الأكاديميات</h2>
                     <br>
-                    <button class="btn_card"   onclick="location.href= 'addAdvisors.php'">أضف </button><br>
-                    <button class="btn_card"  onclick="location.href= 'advisors.php'">عرض </button>
+                    <button class="btn_card" onclick="location.href= 'addAdvisors.php'">أضف </button><br>
+                    <button class="btn_card" onclick="location.href= 'advisors.php'">عرض </button>
                 </div>
 
 
@@ -68,10 +71,10 @@ $_SESSION['page']='home.php';
         </div>
 
         <?php
-        
+
         include("nav.php");
         ?>
-        
+
 
     </div>
 </body>

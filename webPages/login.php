@@ -34,7 +34,7 @@ try {
     $uid = $verifiedIdToken->claims()->get('sub');
     $_SESSION['verified_user_id']=$uid;
     $_SESSION['idTokenString']=$idTokenString;
-   $_SESSION="logged in sucessfully";
+   $_SESSION['logged_in']="logged in sucessfully";
      header("Location: home.php");
 } 
 catch (InvalidArgumentException $e) {

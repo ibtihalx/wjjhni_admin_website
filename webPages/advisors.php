@@ -1,6 +1,9 @@
 <?php
 session_start();
 $_SESSION['page'] = 'advisors.php';
+        if (!isset($_SESSION['logged_in'])) {
+            header("Location: index.php");
+        }
 require '../vendor/autoload.php';
 
 use webPages\models\Firestore;

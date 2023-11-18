@@ -1,6 +1,9 @@
 <?php
 session_start();
 $_SESSION['page'] = 'addStudent.php';
+        if (!isset($_SESSION['logged_in'])) {
+            header("Location: index.php");
+        }
 
 require '../vendor/autoload.php';
 include '../dbcon.php';
