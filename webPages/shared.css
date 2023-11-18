@@ -62,6 +62,10 @@ header img {
 
 }
 
+h4{
+    color:#375E98;
+}
+
 .warper {
     /* background-color: #212020; */
 padding: 1%;
@@ -366,4 +370,18 @@ section .details span {
         border-radius: 5px;
         padding: 30px;
         box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #6990F2;
+    color: #fff;
+    border-radius: 4px;
+    border: 1px solid #6990F2;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
 }
