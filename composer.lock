@@ -2905,7 +2905,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "google/cloud": 20
+        "google/cloud": 20,
+        "phpmailer/phpmailer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
