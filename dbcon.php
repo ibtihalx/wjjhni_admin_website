@@ -5,11 +5,12 @@ require __DIR__.'/vendor/autoload.php';
 // require __DIR__.'vendor\autoload.php';
 
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\Auth;
 $serviceAccountFilePath = 'models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json';
 
 if (file_exists($serviceAccountFilePath) && is_readable($serviceAccountFilePath)) {
     // Proceed with Firebase initialization
-    print("exist");
+    // print("exist");
 } else {
     die("Service account file is missing or not readable.");
 }

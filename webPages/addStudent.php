@@ -3,9 +3,10 @@ session_start();
 $_SESSION['page'] = 'addStudent.php';
 
 require '../vendor/autoload.php';
-
+include '../dbcon.php';
 use Google\Cloud\Firestore\FirestoreClient;
 
+require_once 'mailer.php';
 
 putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
 $projectId = 'wjjhni';
@@ -111,12 +112,40 @@ $firestore = new FirestoreClient([
                                 // Insert data into Firestore with auto-generated document ID
                                 $collection = $firestore->collection('students'); // Replace with your collection name
                                 $newDoc = $collection->add($rowData);
+                                $password = randomPassword();
+                                $userProperties = [
+                                    'email' => $rowData['email'],
+                                    'emailVerified' => false,
+                                    'password' => $password,
+                                    'disabled' => false,
+                                ];
+
+
+                                $createdUser = $auth->createUser($userProperties);
+                                sendEmail($rowData['email'], $password);
+
+
+
                             }
 
                             fclose($handle); // Close the CSV file
                         }
                     } else {
                     }
+
+
+                    function randomPassword()
+                    {
+                        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+                        $pass = array(); //remember to declare $pass as an array
+                        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+                        for ($i = 0; $i < 8; $i++) {
+                            $n = rand(0, $alphaLength);
+                            $pass[] = $alphabet[$n];
+                        }
+                        return implode($pass); //turn the array into a string
+                    }
+
 
                     ?>
 
