@@ -1,9 +1,9 @@
 <?php
 session_start();
 $_SESSION['page'] = 'addStudent.php';
-        if (!isset($_SESSION['logged_in'])) {
-            header("Location: index.php");
-        }
+if (!isset($_SESSION['logged_in'])) {
+    header("Location: index.php");
+}
 
 require '../vendor/autoload.php';
 include '../dbcon.php';
@@ -19,9 +19,9 @@ $databaseId = '(default)';
 $f = new Firestore();
 $f->setCollectionName('students');
 
- $firestore = new FirestoreClient([
-     'projectId' => $projectId,
-     'databaseId' => $databaseId,
+$firestore = new FirestoreClient([
+    'projectId' => $projectId,
+    'databaseId' => $databaseId,
 ]);
 ?>
 
@@ -64,41 +64,41 @@ $f->setCollectionName('students');
 
                 <div class="wrap_stu">
                     <header id="stu_header">تحميل الملفات</header>
-<br>
-<h4> صيغة الملف المطلوبة: </h4>
-<img src="images/stdsample.png" alt="studentsSample">
-<br>
+                    <br>
+                    <h4> صيغة الملف المطلوبة: </h4>
+                    <img src="images/stdsample.png" alt="studentsSample">
+                    <br>
                     <form action="" method="post" enctype="multipart/form-data" id="stu_file">
                         <p id="file_hint">
-                              يجب أن تكون صيغة الملف
-                              "csv."                    
+                            يجب أن تكون صيغة الملف
+                            "csv."
 
                         </p><br>
                         <label for="fileInput" class="custom-file-upload">تحميل ملف
-                        <input type="file" name="file" accept=".csv" id="fileInput" style="display:none;">
+                            <input type="file" name="file" accept=".csv" id="fileInput" style="display:none;">
                         </label><br>
-                      <div id="uploaded"></div>
-                    <br>
-                    <input type="submit" value="أضف +" class="custom-file-upload">
+                        <div id="uploaded"></div>
+                        <br>
+                        <input type="submit" value="أضف +" class="custom-file-upload">
                         <i class="fas fa-cloud-upload-alt"></i>
-                    
+
                     </form>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#fileInput').change(function() {
-            if ($(this).val()) {
-                document.getElementById("uploaded").innerHTML = "تم اختيار ملف, الرجاء الضغط على ’أضف’";
-            }
-        });
-    });
-</script>
+                    <script>
+                        $(document).ready(function() {
+                            $('#fileInput').change(function() {
+                                if ($(this).val()) {
+                                    document.getElementById("uploaded").innerHTML = "تم اختيار ملف, الرجاء الضغط على ’أضف’";
+                                }
+                            });
+                        });
+                    </script>
 
                     <?php
-                    $added=0;
+                    $added = 0;
                     if (isset($_FILES['file'])) {
                         // Access 'file' key in $_FILES array
-                        
+
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $uploadDir = 'uploads/';
 
@@ -127,55 +127,58 @@ $f->setCollectionName('students');
 
                         $csvFile = "uploads/" . $_FILES['file']['name'];
                         if (($handle = fopen($csvFile, 'r')) !== FALSE) {
-                            $std = fopen($csvFile,'r');
+                            $std = fopen($csvFile, 'r');
                             $headers = fgetcsv($handle);
                             $firstLine = fgets($std);
                             $columnsCount = count(explode(',', $firstLine));
-                                if ($columnsCount == 6 ){
+                            if ($columnsCount == 6) {
 
-                            while (($data = fgetcsv($handle)) !== FALSE) {
-                                $rowData = array_combine($headers, $data); // Combine headers with row data
+                                while (($data = fgetcsv($handle)) !== FALSE) {
+                                    $rowData = array_combine($headers, $data); // Combine headers with row data
 
 
-                                // Insert data into Firestore with auto-generated document ID
-                                $collection = $firestore->collection('students'); // Replace with your collection name
-                                
-                                if (isset($data[2])) {
-                                    // $data[$columnIndex] contains the value of the desired column
-                                    $columnValue = $data[2];
+                                    // Insert data into Firestore with auto-generated document ID
+                                    $collection = $firestore->collection('students'); // Replace with your collection name
 
-                                if(!$f->checkDocumentExists('email',$columnValue)){
-                                    $newDoc = $collection->add($rowData);
-                                $password = randomPassword();
-                                $userProperties = [
-                                    'email' => $rowData['email'],
-                                    'emailVerified' => false,
-                                    'password' => $password,
-                                    'disabled' => false,
-                                ];
-                                $added=1;
-                                
+                                    if (isset($data[2])) {
+                                        // $data[$columnIndex] contains the value of the desired column
+                                        $columnValue = $data[2];
 
-try{
-                                $createdUser = $auth->createUser($userProperties);
-                                sendEmail($rowData['email'], $password);
+                                        if (!$f->checkDocumentExists('email', $columnValue)) {
 
-}catch(Kreait\Firebase\Exception\Auth\EmailExists $e)
-{ echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
-exit;}
-} 
-}
-                            }
-                                } else {
-                                    $added=2;
+                                            $password = randomPassword();
+                                            $userProperties = [
+                                                'email' => $rowData['email'],
+                                                'emailVerified' => false,
+                                                'password' => $password,
+                                                'disabled' => false,
+                                            ];
+                                           
+
+
+                                            try {
+                                                $createdUser = $auth->createUser($userProperties);
+                                                $rowData['uid'] = $createdUser->uid;
+                                                $newDoc = $collection->add($rowData);
+                                                sendEmail($rowData['email'], $password);
+                                                $added = 1;
+                                            } catch (Kreait\Firebase\Exception\Auth\EmailExists $e) {
+                                                echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
+                                                exit;
+                                            }
+                                        }
+                                    }
                                 }
+                            } else {
+                                $added = 2;
+                            }
 
-                            
-                            if($added == 0){
+
+                            if ($added == 0) {
                                 echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
-                            }else if ($added == 1){
+                            } else if ($added == 1) {
                                 echo 'تمت الإضافة بنجاح';
-                            }else if ($added==2){
+                            } else if ($added == 2) {
                                 echo "صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى";
                             }
 
@@ -203,10 +206,10 @@ exit;}
 
                 </div>
             </div>
-            
+
         </div>
 
-        
+
         <?php
         include("nav.php");
 
