@@ -1,14 +1,16 @@
-<?php session_start(); 
-$_SESSION['page']='students.php';
+<?php session_start();
+$_SESSION['page'] = 'students.php';
 if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 require '../vendor/autoload.php';
-use webPages\models\Firestore;
-$f=new Firestore();
 
- $collection=$f->setCollectionName('students');
-$students=$collection->getAllDocuments();
+use webPages\models\Firestore;
+
+$f = new Firestore();
+
+$collection = $f->setCollectionName('students');
+$students = $collection->getAllDocuments();
 
 ?>
 
@@ -29,8 +31,8 @@ $students=$collection->getAllDocuments();
 
     <header>
         <img src="images/logo.png" alt="logo">
-<button id="logout">تسجيل الخروج
-    <span><img src="images/logout.svg"></span></button>
+        <button id="logout">تسجيل الخروج
+            <span><img src="images/logout.svg"></span></button>
     </header>
 
 
@@ -43,62 +45,62 @@ $students=$collection->getAllDocuments();
         <div class="warper">
 
             <h1> عرض الطالبات</h1>
-<br>
+            <br>
 
             <div class="continer">
-              <table>
-<tr>
-    <th>
-الاسم
-    </th>
-        <th>
-           الرقم الجامعي
-        </th>
-        <th>
-            البريد الإلكتروني
-        </th>
-                <th>
-                    التخصص
-                </th>
-                               
-                                <th>
-                                    عدد الساعات المكتملة
-                                </th>
-                                <th>
-                                    المرشدة الأكاديمية
-                                </th>
-</tr>
+                <table>
+                    <tr>
+                        <th>
+                            الاسم
+                        </th>
+                        <th>
+                            الرقم الجامعي
+                        </th>
+                        <th>
+                            البريد الإلكتروني
+                        </th>
+                        <th>
+                            التخصص
+                        </th>
+
+                        <th>
+                            عدد الساعات المكتملة
+                        </th>
+                        <th>
+                            المرشدة الأكاديمية
+                        </th>
+                    </tr>
 
 
 
 
-<?php
-foreach($students as $student) {
-    echo'<tr>';
-    echo'<td>'.$student['name']."</td>";
-     echo'<td>'.$student['id']."</td>";
-    echo'<td class="stu_email">'.$student['email']."</td>";
-    echo'<td>'.$student['major']."</td>";
-    echo'<td>'.$student['complated_hours']."</td>";
-     echo'<td>'."</td>";
-     echo"</tr>";
-    
-}
-?>
+                    <?php
+                    //get all student info
+                    foreach ($students as $student) {
+                        echo '<tr>';
+                        echo '<td>' . $student['name']. "</td>";
+                        echo '<td>' . $student['id'] . "</td>";
+                        echo '<td class="stu_email">' . $student['email'] . "</td>";
+                        echo '<td>' . $student['major'] . "</td>";
+                        echo '<td>' . $student['completed_hours'] . "</td>";
+                        echo '<td>' . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
 
 
 
 
-              </table>
+                </table>
 
 
 
 
             </div>
         </div>
-<?php
-include('nav.php');
-?>
+        <?php
+        include('nav.php');
+        ?>
 
 
     </div>

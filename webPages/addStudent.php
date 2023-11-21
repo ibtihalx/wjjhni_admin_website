@@ -79,7 +79,7 @@ $firestore = new FirestoreClient([
                         </label><br>
                         <div id="uploaded"></div>
                         <br>
-                        <input type="submit" value="أضف +" class="custom-file-upload">    
+                        <input type="submit" value="أضف +" class="custom-file-upload">
                         <i class="fas fa-cloud-upload-alt"></i>
 
                     </form>
@@ -87,9 +87,9 @@ $firestore = new FirestoreClient([
                     <script>
                         $(document).ready(function() {
                             $('#fileInput').change(function() {
-                                if ($(this).val()) {  // to check if file choosen or not
+                                if ($(this).val()) { // to check if file choosen or not
                                     document.getElementById("uploaded").innerHTML = "تم اختيار ملف, الرجاء الضغط على ’أضف’";
-                                } 
+                                }
                             });
                         });
                     </script>
@@ -128,21 +128,28 @@ $firestore = new FirestoreClient([
 
                         $csvFile = "uploads/" . $_FILES['file']['name'];
 
-                        if (is_uploaded_file($_FILES['file']['name']) && (($handle = fopen($csvFile, 'r')) !== FALSE)) {
+                        if ((($handle = fopen($csvFile, 'r')) !== FALSE)) {
                             $std = fopen($csvFile, 'r');
                             $headers = fgetcsv($handle);
-                                
+
                             // check if file formula is correct by counting number of columns
                             $firstLine = fgets($std);
                             $columnsCount = count(explode(',', $firstLine));
                             if ($columnsCount == 6) {
+                                //to remove hidden Byte Order Mark (BOM) and white spaces 
+                                $headers
+                                    = preg_replace("/\xEF\xBB\xBF/", "", $headers);
+
+                                $headers = preg_replace('/\s+/', '', $headers);
 
                                 while (($data = fgetcsv($handle)) !== FALSE) {
+                                   
+
                                     $rowData = array_combine($headers, $data); // Combine headers with row data
 
 
                                     // Insert data into Firestore with auto-generated document ID
-                                    $collection = $firestore->collection('students'); 
+                                    $collection = $firestore->collection('students');
 
                                     if (isset($data[2])) {
                                         // $data[$columnIndex] contains the value of the desired column
@@ -158,7 +165,7 @@ $firestore = new FirestoreClient([
                                                 'password' => $password,
                                                 'disabled' => false,
                                             ];
-                                           
+
                                             try {
                                                 $createdUser = $auth->createUser($userProperties);
                                                 $rowData['uid'] = $createdUser->uid;
@@ -176,14 +183,14 @@ $firestore = new FirestoreClient([
                                 $added = 2;
                             }
 
-                            
+
                             if ($added == 0) {
                                 echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
                             } else if ($added == 1) {
                                 echo 'تمت الإضافة بنجاح';
                             } else if ($added == 2) {
                                 echo "صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى";
-                            } 
+                            }
 
                             fclose($handle); // Close the CSV file
                         }

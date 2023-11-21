@@ -128,7 +128,7 @@ $firestore = new FirestoreClient([
 
                         $csvFile = "uploads/" . $_FILES['file']['name'];
 
-                        if (is_uploaded_file($_FILES['file']['name']) && (($handle = fopen($csvFile, 'r')) !== FALSE)) {
+                        if ((($handle = fopen($csvFile, 'r')) !== FALSE)) {
                             $adv = fopen($csvFile, 'r');
                             $headers = fgetcsv($handle);
 
@@ -136,13 +136,18 @@ $firestore = new FirestoreClient([
                             $firstLine = fgets($adv);
                             $columnsCount = count(explode(',', $firstLine));
                             if ($columnsCount == 5) {
+                                //to remove BOM and white spaces 
+                                $headers
+                                    = preg_replace("/\xEF\xBB\xBF/", "", $headers);
+                                $headers = preg_replace('/\s+/', '', $headers);
 
                                 while (($data = fgetcsv($handle)) !== FALSE) {
+
                                     $rowData = array_combine($headers, $data); // Combine headers with row data
 
 
                                     // Insert data into Firestore with auto-generated document ID
-                                    $collection = $firestore->collection('academic_advisors'); 
+                                    $collection = $firestore->collection('academic_advisors');
 
                                     if (isset($data[2])) {
                                         // $data[$columnIndex] contains the value of the desired column
@@ -158,7 +163,7 @@ $firestore = new FirestoreClient([
                                                 'password' => $password,
                                                 'disabled' => false,
                                             ];
-                                           
+
                                             try {
                                                 $createdUser = $auth->createUser($userProperties);
                                                 $rowData['uid'] = $createdUser->uid;
@@ -215,7 +220,7 @@ $firestore = new FirestoreClient([
         <?php
         include("nav.php");
         ?>
-        
+
     </div>
 
 </body>
