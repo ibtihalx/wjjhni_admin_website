@@ -79,7 +79,7 @@ foreach($students as $student) {
      echo'<td>'.$student['id']."</td>";
     echo'<td class="stu_email">'.$student['email']."</td>";
     echo'<td>'.$student['major']."</td>";
-    echo'<td>'.$student['completed_hours']."</td>";
+    echo'<td>'.$student['complated_hours']."</td>";
      echo'<td>'."</td>";
      echo"</tr>";
     
