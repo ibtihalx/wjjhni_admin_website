@@ -11,12 +11,12 @@ include '../dbcon.php';
 use Google\Cloud\Firestore\FirestoreClient;
 use webPages\models\Firestore;
 
-require_once 'mailer.php';
+require_once 'mailer.php';       // for email confirmation
 
 putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
 $projectId = 'wjjhni';
 $databaseId = '(default)';
-$f = new Firestore();
+$f = new Firestore();     // Firestore object to access database
 $f->setCollectionName('academic_advisors');
 
 $firestore = new FirestoreClient([
@@ -123,12 +123,16 @@ $firestore = new FirestoreClient([
                     }
 
                     if (isset($_FILES['file'])) {
+
                         // Access 'file' key in $_FILES array
 
                         $csvFile = "uploads/" . $_FILES['file']['name'];
-                        if (($handle = fopen($csvFile, 'r')) !== FALSE) {
+
+                        if (is_uploaded_file($_FILES['file']['name']) && (($handle = fopen($csvFile, 'r')) !== FALSE)) {
                             $adv = fopen($csvFile, 'r');
                             $headers = fgetcsv($handle);
+
+                            // check if file formula is correct by counting number of columns
                             $firstLine = fgets($adv);
                             $columnsCount = count(explode(',', $firstLine));
                             if ($columnsCount == 5) {
@@ -138,12 +142,13 @@ $firestore = new FirestoreClient([
 
 
                                     // Insert data into Firestore with auto-generated document ID
-                                    $collection = $firestore->collection('academic_advisors'); // Replace with your collection name
+                                    $collection = $firestore->collection('academic_advisors'); 
 
                                     if (isset($data[2])) {
                                         // $data[$columnIndex] contains the value of the desired column
                                         $columnValue = $data[2];
 
+                                        //check if a user already exists by email
                                         if (!$f->checkDocumentExists('email', $columnValue)) {
 
                                             $password = randomPassword();
@@ -154,13 +159,10 @@ $firestore = new FirestoreClient([
                                                 'disabled' => false,
                                             ];
                                            
-
-
                                             try {
                                                 $createdUser = $auth->createUser($userProperties);
                                                 $rowData['uid'] = $createdUser->uid;
                                                 $newDoc = $collection->add($rowData);
-
                                                 sendEmail($rowData['email'], $password);
                                                 $added = 1;
                                             } catch (Kreait\Firebase\Exception\Auth\EmailExists $e) {
@@ -189,7 +191,6 @@ $firestore = new FirestoreClient([
                     }
 
 
-
                     function randomPassword()
                     {
                         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -201,6 +202,8 @@ $firestore = new FirestoreClient([
                         }
                         return implode($pass); //turn the array into a string
                     }
+
+
                     ?>
 
 
@@ -211,8 +214,8 @@ $firestore = new FirestoreClient([
 
         <?php
         include("nav.php");
-
         ?>
+        
     </div>
 
 </body>

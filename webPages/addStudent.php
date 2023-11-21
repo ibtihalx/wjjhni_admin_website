@@ -11,12 +11,12 @@ include '../dbcon.php';
 use Google\Cloud\Firestore\FirestoreClient;
 use webPages\models\Firestore;
 
-require_once 'mailer.php';
+require_once 'mailer.php';      // for email confirmation
 
 putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
 $projectId = 'wjjhni';
 $databaseId = '(default)';
-$f = new Firestore();
+$f = new Firestore();      // Firestore object to access database
 $f->setCollectionName('students');
 
 $firestore = new FirestoreClient([
@@ -79,7 +79,7 @@ $firestore = new FirestoreClient([
                         </label><br>
                         <div id="uploaded"></div>
                         <br>
-                        <input type="submit" value="أضف +" class="custom-file-upload">
+                        <input type="submit" value="أضف +" class="custom-file-upload">    
                         <i class="fas fa-cloud-upload-alt"></i>
 
                     </form>
@@ -87,9 +87,9 @@ $firestore = new FirestoreClient([
                     <script>
                         $(document).ready(function() {
                             $('#fileInput').change(function() {
-                                if ($(this).val()) {
+                                if ($(this).val()) {  // to check if file choosen or not
                                     document.getElementById("uploaded").innerHTML = "تم اختيار ملف, الرجاء الضغط على ’أضف’";
-                                }
+                                } 
                             });
                         });
                     </script>
@@ -123,12 +123,16 @@ $firestore = new FirestoreClient([
                     }
 
                     if (isset($_FILES['file'])) {
+
                         // Access 'file' key in $_FILES array
 
                         $csvFile = "uploads/" . $_FILES['file']['name'];
-                        if (($handle = fopen($csvFile, 'r')) !== FALSE) {
+
+                        if (is_uploaded_file($_FILES['file']['name']) && (($handle = fopen($csvFile, 'r')) !== FALSE)) {
                             $std = fopen($csvFile, 'r');
                             $headers = fgetcsv($handle);
+                                
+                            // check if file formula is correct by counting number of columns
                             $firstLine = fgets($std);
                             $columnsCount = count(explode(',', $firstLine));
                             if ($columnsCount == 6) {
@@ -138,12 +142,13 @@ $firestore = new FirestoreClient([
 
 
                                     // Insert data into Firestore with auto-generated document ID
-                                    $collection = $firestore->collection('students'); // Replace with your collection name
+                                    $collection = $firestore->collection('students'); 
 
                                     if (isset($data[2])) {
                                         // $data[$columnIndex] contains the value of the desired column
                                         $columnValue = $data[2];
 
+                                        //check if a user already exists by email
                                         if (!$f->checkDocumentExists('email', $columnValue)) {
 
                                             $password = randomPassword();
@@ -154,8 +159,6 @@ $firestore = new FirestoreClient([
                                                 'disabled' => false,
                                             ];
                                            
-
-
                                             try {
                                                 $createdUser = $auth->createUser($userProperties);
                                                 $rowData['uid'] = $createdUser->uid;
@@ -173,14 +176,14 @@ $firestore = new FirestoreClient([
                                 $added = 2;
                             }
 
-
+                            
                             if ($added == 0) {
                                 echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
                             } else if ($added == 1) {
                                 echo 'تمت الإضافة بنجاح';
                             } else if ($added == 2) {
                                 echo "صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى";
-                            }
+                            } 
 
                             fclose($handle); // Close the CSV file
                         }
@@ -209,11 +212,10 @@ $firestore = new FirestoreClient([
 
         </div>
 
-
         <?php
         include("nav.php");
-
         ?>
+
     </div>
 
 </body>

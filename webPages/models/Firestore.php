@@ -3,8 +3,6 @@
 
 namespace webPages\models;
 
-// require '../../vendor/autoload.php';
-
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Cloud\Firestore\DocumentReference;
 use Google\Cloud\Firestore\CollectionReference;
