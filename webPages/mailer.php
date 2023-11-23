@@ -4,8 +4,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', 1);
+
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
@@ -42,7 +43,6 @@ function sendEmail(String $email, String $pass)
             . "<p dir='rtl'>لتسجيل الدخول اتبعي التعليمات الآتية :<p>"
             . "<p dir='rtl'> باستخدام بريدك الإلكتروني :$email" . "</p>" . "<p dir='rtl'>"
             . "كلمة المرور هي :$pass" . "</p>"
-            . "<p dir='rtl' ><b>للوصول الآمن لحسابك نرجو منك تحديث كلمة المرور من خلال التطبيق من خلال الضغط على خانة تحديث الملف الشخصي ثم تحديث كلمة المرور</b></p>"
             . "<br><br><br>"
             . "<p dir='rtl'>فريق وجهني للإرشاد الأكاديمي</p>";
 
@@ -51,7 +51,6 @@ function sendEmail(String $email, String $pass)
             . "لتسجيل الدخول اتبعي التعليمات الآتية :\n"
             . " $email:باستخدام بريدك الإلكتروني \n"
             . "$pass:كلمة المرور هي " . "\n"
-            . "للوصول الآمن لحسابك نرجو منك تحديث كلمة المرور من خلال التطبيق من خلال الضغط على خانة تحديث الملف الشخصي"
             . "فريق وجهني للإرشاد الأكاديمي";
 
         $mail->send();

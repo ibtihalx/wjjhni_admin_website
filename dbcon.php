@@ -8,6 +8,9 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\Auth;
 $serviceAccountFilePath = 'models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json';
 
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 1);
+
 if (file_exists($serviceAccountFilePath) && is_readable($serviceAccountFilePath)) {
     // Proceed with Firebase initialization
     // print("exist");

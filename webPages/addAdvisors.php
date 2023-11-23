@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 1);
+
 $_SESSION['page'] = 'addAdvisors.php';
 if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
