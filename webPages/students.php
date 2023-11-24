@@ -23,7 +23,7 @@ $students = $collection->getAllDocuments();
 
     <link rel="stylesheet" type="text/css" href="shared.css">
 
-    <title>Add page</title>
+    <title>عرض الطالبات </title>
 </head>
 
 

@@ -39,7 +39,7 @@ $firestore = new FirestoreClient([
     <link rel="stylesheet" type="text/css" href="shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
-    <title>Add page</title>
+    <title>إضافة الطالبات</title>
 </head>
 
 

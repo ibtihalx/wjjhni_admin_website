@@ -16,7 +16,7 @@ if (!isset($_SESSION['logged_in'])) {
 
     <link rel="stylesheet" type="text/css" href="shared.css">
 
-    <title>Home page</title>
+    <title>الصفحة الرئيسية </title>
 </head>
 
 
