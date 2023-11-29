@@ -35,7 +35,7 @@ include '../dbcon.php';
             <br>
             <div id="update_paas_successfully">تم تحديث كلمة المرور بنجاح</div>
             <div id="update_paas_worng_pass">يجب أن تكون كلمة المرور ستة أحرف وأكثر </div>
-            <div id="update_paas_worng_pass2">البريد الإلكتروني خاطئ أو كلمة المرور القديمة خاطئة</div>
+            <div id="update_paas_worng_pass2">البريد الإلكتروني خاطئ</div>
             <form action="resetPassword.php" method="post">
                 <div class="input-box">
 
@@ -45,14 +45,14 @@ include '../dbcon.php';
                         <ion-icon name="mail-outline"></ion-icon>
                     </span>
                 </div>
-                <div class="input-box">
+                <!-- <div class="input-box">
 
                     <input name="old_pass" type="password" required>
                     <label>كلمة المرور القديمة</label>
                     <span class="icon">
                         <ion-icon name="lock-closed-outline"></ion-icon>
                     </span>
-                </div>
+                </div> -->
 
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon>
@@ -84,7 +84,7 @@ if (isset($_POST['update_btn'])) {
 
     try {
         // Authenticate the user with their email and old password
-        $user = $auth->signInWithEmailAndPassword($email, $oldPassword);
+        // $user = $auth->signInWithEmailAndPassword($email, $oldPassword);
         $user = $auth->getUserByEmail($email);
         if (strlen($newPassword) < 6) {
             throw new Exception('Password must be at least 6 characters long');
