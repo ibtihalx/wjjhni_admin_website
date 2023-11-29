@@ -64,7 +64,7 @@ $students = $collection->getAllDocuments();
                         </th>
 
                         <th>
-                            عدد الساعات المكتملة
+                            رقم الجوال
                         </th>
                         <th>
                             المرشدة الأكاديمية
@@ -82,7 +82,7 @@ $students = $collection->getAllDocuments();
                         echo '<td>' . $student['id'] . "</td>";
                         echo '<td class="stu_email">' . $student['email'] . "</td>";
                         echo '<td>' . $student['major'] . "</td>";
-                        echo '<td>' . $student['completed_hours'] . "</td>";
+                        echo '<td>' . $student['phone'] . "</td>";
                         echo '<td>' . "</td>";
                         echo "</tr>";
                     }

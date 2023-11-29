@@ -53,6 +53,9 @@ $advisors = $collection->getAllDocuments();
                         <th>
                             القسم
                         </th>
+                        <th>
+                            رقم الجوال
+                        </th>
                     </tr>
 
                     <!-- retrive from DB all advisors info -->
@@ -62,6 +65,7 @@ $advisors = $collection->getAllDocuments();
                         echo '<td>' . $advisor['name'] . "</td>";
                         echo '<td calss="stu_email">' . $advisor['email'] . "</td>";
                         echo '<td>' . $advisor['department'] . "</td>";
+                        echo '<td>' . $advisor['phone'] . "</td>";
                         echo '</tr>';
                     }
 

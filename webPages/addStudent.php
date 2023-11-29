@@ -69,7 +69,7 @@ $firestore = new FirestoreClient([
                 <div class="wrap_stu">
                     <header id="stu_header">تحميل الملفات</header>
                     <br>
-                    <h4> صيغة الملف المطلوبة: </h4>
+                    <h4> صياغة الملف المطلوبة: </h4>
                     <img src="images/stdsample.png" alt="studentsSample">
                     <br>
                     <form action="" method="post" enctype="multipart/form-data" id="stu_file">
@@ -84,7 +84,17 @@ $firestore = new FirestoreClient([
                         <div id="uploaded"></div>
                         <br>
                         <input type="submit" value="أضف +" class="custom-file-upload">
-                        <i class="fas fa-cloud-upload-alt"></i>
+                        <br>
+
+                        <div class="error-message" id="show" >
+                            <span class="error-text" id="errormessage">
+                            </span>
+                        </div>
+                        <div class="success-message" id="show1" >
+                            <span class="success-text" id="successmessage">
+                            </span>
+                        </div>
+
 
                     </form>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -117,10 +127,18 @@ $firestore = new FirestoreClient([
                             if ($fileType === 'csv') {
                                 if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadedFile)) {
                                 } else {
-                                    echo 'هناك خطأ في تحميل الملف';
+                                    ?>
+                                    <script>
+                                       document.getElementById("errormessage").innerHTML = "<p>" + '!هناك خطأ في تحميل الملف' + "</p>";
+                                    </script>
+                                    <?php
                                 }
                             } else {
-                                echo 'صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv';
+                                ?>
+                                    <script>
+                                       document.getElementById("errormessage").innerHTML = "<p>" + '!صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv' + "</p>";
+                                    </script>
+                                <?php
                             }
                         }
                     } else {
@@ -139,7 +157,7 @@ $firestore = new FirestoreClient([
                             // check if file formula is correct by counting number of columns
                             $firstLine = fgets($std);
                             $columnsCount = count(explode(',', $firstLine));
-                            if ($columnsCount == 6) {
+                            if ($columnsCount == 5 && $headers[4] == "major") {
                                 //to remove hidden Byte Order Mark (BOM) and white spaces 
                                 $headers
                                     = preg_replace("/\xEF\xBB\xBF/", "", $headers);
@@ -155,12 +173,13 @@ $firestore = new FirestoreClient([
                                     // Insert data into Firestore with auto-generated document ID
                                     $collection = $firestore->collection('students');
 
-                                    if (isset($data[2])) {
+                                    if (isset($data[2]) && isset($data[3])) {
                                         // $data[$columnIndex] contains the value of the desired column
                                         $columnValue = $data[2];
+                                        $columnValue1 = $data[3];
 
                                         //check if a user already exists by email
-                                        if (!$f->checkDocumentExists('email', $columnValue)) {
+                                        if ((!$f->checkDocumentExists('email', $columnValue)) && !$f->checkDocumentExists('id', $columnValue1)) {
 
                                             $password = randomPassword();
                                             $userProperties = [
@@ -177,8 +196,6 @@ $firestore = new FirestoreClient([
                                                 sendEmail($rowData['email'], $password);
                                                 $added = 1;
                                             } catch (Kreait\Firebase\Exception\Auth\EmailExists $e) {
-                                                echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
-                                                exit;
                                             }
                                         }
                                     }
@@ -187,14 +204,28 @@ $firestore = new FirestoreClient([
                                 $added = 2;
                             }
 
+                            ?>
 
-                            if ($added == 0) {
-                                echo "لم تتم الإضافة, جميع الطالبات مضافات مسبقاً";
-                            } else if ($added == 1) {
-                                echo 'تمت الإضافة بنجاح';
-                            } else if ($added == 2) {
-                                echo "صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى";
-                            }
+                            <script>
+                                var messageFromPHP1 = "<?php 
+                                if ($added == 1) {
+                                    echo '!تمت الإضافة بنجاح';
+                                 } else{
+                                    echo '';}?>";
+                                 document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
+
+
+                                var messageFromPHP = "<?php
+                                   if ($added == 0) {
+                                      echo '!لم تتم الإضافة, جميع الطالبات مضافات مسبقاً';
+                                   } else if ($added == 2) {
+                                      echo '!صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى';
+                                   }?>";
+                                document.getElementById("errormessage").innerHTML = "<p>" + messageFromPHP + "</p>";
+                            </script>
+                            
+                        <?php
+
 
                             fclose($handle); // Close the CSV file
                         }
