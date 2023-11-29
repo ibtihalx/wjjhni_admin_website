@@ -48,7 +48,7 @@ header {
 .warper {
     position: relative;
     width: 400px;
-    height: 440px;
+    height: 80%;
     background: transparent;
     border: 2px solid rgb(255, 255, 255, .5);
     border-radius: 20px;
@@ -202,4 +202,45 @@ header {
     background-color: rgb(136, 26, 26);
     border-radius: 4px;
     padding: 1%;
+}
+#reset{
+    margin-top: 1%;
+    padding: 1%;
+    direction: rtl;
+    color: #fff;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+#reset a{
+    color: #fff;
+}
+#update_paas_successfully{
+    display: none;
+    direction: rtl;
+        color: white;
+        font-weight: bold;
+        background-color: rgb(39, 136, 26);
+        border-radius: 4px;
+        padding: 1%;
+}
+#update_paas_worng_pass,#update_paas_worng_pass2{
+    display: none;
+    direction: rtl;
+        color: white;
+        font-weight: bold;
+        background-color: rgb(136, 26, 26);
+        border-radius: 4px;
+        padding: 1%;
+}
+#link1 {
+    margin-top: 1%;
+    padding: 1%;
+    direction: rtl;
+    color: #fff;
+    margin-left: 25%;
+    margin-right: 10%;
+}
+
+#link1 a {
+    color: #fff;
 }

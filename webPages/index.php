@@ -1,4 +1,3 @@
-
 <?php
 
 session_start();
@@ -25,7 +24,7 @@ ini_set('display_errors', 1);
 </head>
 
 <body>
-   
+
 
     <div class="warper">
 
@@ -53,25 +52,27 @@ ini_set('display_errors', 1);
 
                 <button type="submit" class="btn" name="login_btn">تسجيل الدخول </button>
 
-
+                <div id="reset"><a href="resetPassword.php">هل نسيت كلمة المرور؟</a>
+                    <div>
             </form>
         </div>
     </div>
-    
+
 
 
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    </body>
-    <?php 
-    if( $_SESSION["showError"]==true){
-    echo'<script>
+</body>
+<?php
+if ($_SESSION["showError"] == true) {
+    echo '<script>
     // alert("hello");
     document.getElementById("login_error_msg").style.display="block";
     </script>';
     session_destroy();
 }
-    
-    ?>
+
+?>
+
 </html>
