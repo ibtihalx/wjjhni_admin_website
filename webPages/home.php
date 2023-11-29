@@ -24,7 +24,7 @@ if (!isset($_SESSION['logged_in'])) {
 
     <header>
         <img src="images/logo.png" alt="logo">
-        <button id="logout">تسجيل الخروج
+        <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
 
     </header>

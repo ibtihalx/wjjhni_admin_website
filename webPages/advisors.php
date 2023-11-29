@@ -1,9 +1,9 @@
 <?php
 session_start();
 $_SESSION['page'] = 'advisors.php';
-        if (!isset($_SESSION['logged_in'])) {
-            header("Location: index.php");
-        }
+if (!isset($_SESSION['logged_in'])) {
+    header("Location: index.php");
+}
 require '../vendor/autoload.php';
 
 use webPages\models\Firestore;
@@ -28,7 +28,7 @@ $advisors = $collection->getAllDocuments();
 
     <header>
         <img src="images/logo.png" alt="logo">
-        <button id="logout">تسجيل الخروج
+        <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
     </header>
 
@@ -54,12 +54,12 @@ $advisors = $collection->getAllDocuments();
                             القسم
                         </th>
                     </tr>
-                  
+
                     <!-- retrive from DB all advisors info -->
                     <?php
-                    foreach ($advisors as $advisor) {   
-                        echo'<tr>';
-                        echo'<td>'.$advisor['name']."</td>";
+                    foreach ($advisors as $advisor) {
+                        echo '<tr>';
+                        echo '<td>' . $advisor['name'] . "</td>";
                         echo '<td calss="stu_email">' . $advisor['email'] . "</td>";
                         echo '<td>' . $advisor['department'] . "</td>";
                         echo '</tr>';

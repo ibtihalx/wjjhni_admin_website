@@ -31,7 +31,7 @@ $students = $collection->getAllDocuments();
 
     <header>
         <img src="images/logo.png" alt="logo">
-        <button id="logout">تسجيل الخروج
+        <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
     </header>
 
@@ -78,7 +78,7 @@ $students = $collection->getAllDocuments();
                     //get all student info
                     foreach ($students as $student) {
                         echo '<tr>';
-                        echo '<td>' . $student['name']. "</td>";
+                        echo '<td>' . $student['name'] . "</td>";
                         echo '<td>' . $student['id'] . "</td>";
                         echo '<td class="stu_email">' . $student['email'] . "</td>";
                         echo '<td>' . $student['major'] . "</td>";
