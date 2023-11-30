@@ -129,14 +129,14 @@ $firestore = new FirestoreClient([
                                 } else {
                                     ?>
                                     <script>
-                                       document.getElementById("errormessage").innerHTML = "<p>" + '!هناك خطأ في تحميل الملف' + "</p>";
+                                       document.getElementById("errormessage").innerHTML = "<p>" + 'هناك خطأ في تحميل الملف!' + "</p>";
                                     </script>
                                     <?php
                                 }
                             } else {
                                 ?>
                                     <script>
-                                       document.getElementById("errormessage").innerHTML = "<p>" + '!صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv' + "</p>";
+                                       document.getElementById("errormessage").innerHTML = "<p>" + 'صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv!' + "</p>";
                                     </script>
                                 <?php
                             }
@@ -209,7 +209,7 @@ $firestore = new FirestoreClient([
                             <script>
                                 var messageFromPHP1 = "<?php 
                                 if ($added == 1) {
-                                    echo '!تمت الإضافة بنجاح';
+                                    echo 'تمت الإضافة بنجاح!';
                                  } else{
                                     echo '';}?>";
                                  document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
@@ -217,9 +217,9 @@ $firestore = new FirestoreClient([
 
                                 var messageFromPHP = "<?php
                                    if ($added == 0) {
-                                      echo '!لم تتم الإضافة, جميع الطالبات مضافات مسبقاً';
+                                      echo 'لم تتم الإضافة, جميع الطالبات مضافات مسبقاً!';
                                    } else if ($added == 2) {
-                                      echo '!صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى';
+                                      echo 'صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى!';
                                    }?>";
                                 document.getElementById("errormessage").innerHTML = "<p>" + messageFromPHP + "</p>";
                             </script>
