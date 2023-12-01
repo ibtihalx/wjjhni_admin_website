@@ -43,10 +43,14 @@ ini_set('display_errors', 1);
                 </div>
 
                 <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon>
+                    <!-- <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon> -->
+                    <span class="icon" id="show-password-toggle" onclick="togglePassword()">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </span>
+
 
                     </span>
-                    <input name="password" type="password" required>
+                    <input name="password" type="password" id="password" required>
                     <label>كلمة المرور</label>
                 </div>
 
@@ -63,6 +67,20 @@ ini_set('display_errors', 1);
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var icon = document.getElementById("show-password-toggle");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.innerHTML = '<ion-icon name="eye-off-outline"></ion-icon>';
+            } else {
+                passwordField.type = "password";
+                icon.innerHTML = '<ion-icon name="eye-outline"></ion-icon>';
+            }
+        }
+    </script>
 </body>
 <?php
 if ($_SESSION["showError"] == true) {
