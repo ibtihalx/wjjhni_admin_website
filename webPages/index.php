@@ -19,7 +19,17 @@ ini_set('display_errors', 1);
 
 
 
+    <style>
+        #content {
+            position: relative;
+        }
 
+        #content img {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+    </style>
 
 </head>
 
@@ -28,7 +38,12 @@ ini_set('display_errors', 1);
 
     <div class="warper">
 
+
+
         <div class="form-box login">
+
+    
+
             <h2>تسجيل الدخول</h2>
             <br>
             <div id="login_error_msg">كلمة المرور خاطئة أو البريد الإلكتروني خاطئ<br> الرجاء المحاولة مرة أخرى .</div>

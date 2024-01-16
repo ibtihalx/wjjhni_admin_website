@@ -31,6 +31,7 @@ $students = $collection->getAllDocuments();
 
     <header>
         <img src="images/logo.png" alt="logo">
+        <h1 class="title"> وجّهني نظام الإرشاد الأكاديمي </h1>
         <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
     </header>

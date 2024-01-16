@@ -47,6 +47,7 @@ $firestore = new FirestoreClient([
 
     <header>
         <img src="images/logo.png" alt="logo">
+        <h1 class="title"> وجّهني نظام الإرشاد الأكاديمي </h1>
         <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
 
@@ -85,11 +86,11 @@ $firestore = new FirestoreClient([
                         <br>
                         <input type="submit" value="أضف +" class="custom-file-upload">
                         <br>
-                        <div class="error-message" id="show" >
+                        <div class="error-message" id="show">
                             <span class="error-text" id="errormessage">
                             </span>
                         </div>
-                        <div class="success-message" id="show1" >
+                        <div class="success-message" id="show1">
                             <span class="success-text" id="successmessage">
                             </span>
                         </div>
@@ -125,18 +126,18 @@ $firestore = new FirestoreClient([
                             if ($fileType === 'csv') {
                                 if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadedFile)) {
                                 } else {
-                                    ?>
+                    ?>
                                     <script>
-                                       document.getElementById("errormessage").innerHTML = "<p>" + 'هناك خطأ في تحميل الملف!' + "</p>";
+                                        document.getElementById("errormessage").innerHTML = "<p>" + 'هناك خطأ في تحميل الملف!' + "</p>";
                                     </script>
-                                    <?php
+                                <?php
                                 }
                             } else {
                                 ?>
-                                    <script>
-                                       document.getElementById("errormessage").innerHTML = "<p>" + 'صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv!' + "</p>";
-                                    </script>
-                                <?php
+                                <script>
+                                    document.getElementById("errormessage").innerHTML = "<p>" + 'صيغة الملف غير مدعومة! الرجاء إعادة المحاولة وإضافة ملف csv!' + "</p>";
+                                </script>
+                            <?php
                             }
                         }
                     } else {
@@ -203,24 +204,25 @@ $firestore = new FirestoreClient([
                             ?>
 
                             <script>
-                                var messageFromPHP1 = "<?php 
-                                if ($added == 1) {
-                                    echo 'تمت الإضافة بنجاح!';
-                                 } else{
-                                    echo '';}?>";
-                                 document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
+                                var messageFromPHP1 = "<?php
+                                                        if ($added == 1) {
+                                                            echo 'تمت الإضافة بنجاح!';
+                                                        } else {
+                                                            echo '';
+                                                        } ?>";
+                                document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
 
 
                                 var messageFromPHP = "<?php
-                                   if ($added == 0) {
-                                      echo 'لم تتم الإضافة, جميع المرشدات مضافات مسبقاً!';
-                                   } else if ($added == 2) {
-                                      echo 'صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى!';
-                                   }?>";
+                                                        if ($added == 0) {
+                                                            echo 'لم تتم الإضافة, جميع المرشدات مضافات مسبقاً!';
+                                                        } else if ($added == 2) {
+                                                            echo 'صياغة الملف خاطئة, الرجاء التقيد بالصياغة في الأعلى!';
+                                                        } ?>";
                                 document.getElementById("errormessage").innerHTML = "<p>" + messageFromPHP + "</p>";
                             </script>
-                            
-                        <?php
+
+                    <?php
 
                             fclose($handle); // Close the CSV file
                         }

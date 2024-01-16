@@ -24,6 +24,7 @@ if (!isset($_SESSION['logged_in'])) {
 
     <header>
         <img src="images/logo.png" alt="logo">
+        <h1 class="title"> وجّهني نظام الإرشاد الأكاديمي </h1>
         <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
 
@@ -62,7 +63,54 @@ if (!isset($_SESSION['logged_in'])) {
                 </div>
 
 
-                <!-- 8888888888888888888888888888888 -->
+                <div class="box">
+                    <div><img src="images/plan-svgrepo-com.svg"></div>
+
+                    <h2> الخطط الدراسية</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'plans.php'">تعديل </button><br>
+
+                </div>
+
+
+                <div class="box">
+                    <div><img src="images/assignee-svgrepo-com.svg"></div>
+
+                    <h2>إسناد الطالبات</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'studentsAssignment.php'">إسناد </button><br>
+                </div>
+
+                <div class="box">
+                    <div><img src="images/important-dates-svgrepo-com.svg"></div>
+
+                    <h2> المواعيد المهمة</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'importantDates.php'">أضف </button><br>
+                    <button class="btn_card" onclick="location.href= 'importantDates.php'">حذف </button><br>
+                </div>
+
+
+                <div class="box">
+                    <div><img src="images/delete-profile-svgrepo-com.svg"></div>
+
+                    <h2> حذف المستخدمين</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'studentsDelete.php'">حذف الطالبات </button><br>
+                    <button class="btn_card" onclick="location.href= 'advisorsDelete.php'">حذف المرشدات </button><br>
+                </div>
+
+
+                <div class="box">
+                    <div><img src="images/google-forms-svgrepo-com.svg"></div>
+
+                    <h2>النماذج الأكاديمية</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'academicForms.php'">أضف</button><br>
+                    <button class="btn_card" onclick="location.href= 'academicForms.php'">حذف</button><br>
+                </div>
+
+
 
 
 
