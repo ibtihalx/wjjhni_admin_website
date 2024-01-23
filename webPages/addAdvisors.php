@@ -109,6 +109,7 @@ $firestore = new FirestoreClient([
 
                     <?php
                     $added = 0;
+                    $num= 0;
                     if (isset($_FILES['file'])) {
                         // Access 'file' key in $_FILES array
 
@@ -191,6 +192,7 @@ $firestore = new FirestoreClient([
                                                 $newDoc = $collection->add($rowData);
                                                 sendEmail($rowData['email'], $password);
                                                 $added = 1;
+                                                $num= $num+1;
                                             } catch (Kreait\Firebase\Exception\Auth\EmailExists $e) {
                                             }
                                         }
@@ -206,7 +208,7 @@ $firestore = new FirestoreClient([
                             <script>
                                 var messageFromPHP1 = "<?php
                                                         if ($added == 1) {
-                                                            echo 'تمت الإضافة بنجاح!';
+                                                            echo 'تمت إضافة  '.$num.'  مرشدة بنجاح';
                                                         } else {
                                                             echo '';
                                                         } ?>";
