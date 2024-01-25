@@ -66,6 +66,13 @@ h4{
     color:#375E98;
 }
 
+h5{
+    text-align: right;
+    font-size:25px;
+    color:#274e89;
+    font-family: 'Droid Arabic Kufi', serif;
+}
+
 .warper {
     /* background-color: #212020; */
 padding: 1%;
@@ -423,3 +430,48 @@ section .details span {
   color: #375E98;
 text-shadow: 2px 2px 4px #9cb4cc;
   }
+
+
+  
+  .LinkAdv,
+.LinkAdv * {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+.LinkAdv {
+  position: relative;
+  background-color: #7d98be;
+  border-radius: 4px;
+}
+.LinkAdv select {
+    text-align: right;
+    width:250px;
+    color:#ffffff ;
+  font-size: 20px;
+  max-width: 200%;
+  font-weight: normal;
+  padding: 8px 24px 8px 10px;
+  border: none;
+  background-color: #8da5c8;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  appearance: none;
+}
+.LinkAdv select:active, .LinkAdv select:focus {
+  outline: none;
+  box-shadow: none;
+}
+.LinkAdv:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-top: 5px solid #ffffff;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}

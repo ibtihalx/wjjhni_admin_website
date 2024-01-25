@@ -3,6 +3,16 @@ $_SESSION['page'] = 'studentsAssignment.php';
 if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
+
+require '../vendor/autoload.php';
+include '../dbcon.php';
+
+use webPages\models\Firestore;
+
+$f = new Firestore();
+$collection = $f->setCollectionName('academic_advisors');
+//retrive all advisors documents
+$advisors = $collection->getAllDocuments();
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +46,21 @@ if (!isset($_SESSION['logged_in'])) {
             <br>
 
             <div class="continer">
+            <form>
+                <br><br>
+                <h5>: اختر مرشدة  -</h5>
+                <br>
+                <div class="LinkAdv">
+                <select name="dropdown">
+                <?php
+                foreach ($advisors as $advisor) {
+                    echo '<option>'.$advisor['name'].'</option>';
+                }
+                ?>
+                </select>
+            </div>
+            </form>    
+
 
             </div>
         </div>
