@@ -12,6 +12,9 @@ $f = new Firestore();
 $collection = $f->setCollectionName('students');
 $students = $collection->getAllDocuments();
 
+$collection1 = $f->setCollectionName('academic_advisors');
+$advisors = $collection->getAllDocuments();
+
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +87,13 @@ $students = $collection->getAllDocuments();
                         echo '<td class="stu_email">' . $student['email'] . "</td>";
                         echo '<td>' . $student['major'] . "</td>";
                         echo '<td>' . $student['phone'] . "</td>";
-                        echo '<td>' . "</td>";
+                        $adv="";
+                        foreach ($advisors as $advisor){
+                            if($student["AdvisorUID"]== $advisor["uid"]){
+                                $adv = $advisor["name"];
+                            } 
+                        }
+                        echo '<td>' .$adv. "</td>";
                         echo "</tr>";
                     }
                     ?>

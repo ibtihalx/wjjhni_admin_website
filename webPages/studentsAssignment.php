@@ -4,8 +4,12 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 
+use Google\Cloud\Firestore\FirestoreClient;
 require '../vendor/autoload.php';
 include '../dbcon.php';
+putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
+$projectId = 'wjjhni';
+$databaseId = '(default)';
 
 use webPages\models\Firestore;
 
@@ -13,9 +17,19 @@ $f = new Firestore();
 $collection = $f->setCollectionName('academic_advisors');
 //retrive all advisors documents
 $advisors = $collection->getAllDocuments();
+
+$collection1 = $f->setCollectionName('students');
+$students = $collection1->getAllDocuments();
+
+$firestore = new FirestoreClient([
+    'projectId' => $projectId,
+    'databaseId' => $databaseId,
+]);
+$documents = $firestore->collection("students")->documents();
 ?>
 
 <!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <html>
 
 <head>
@@ -23,6 +37,7 @@ $advisors = $collection->getAllDocuments();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" type="text/css" href="shared.css">
+    
 
     <title>إسناد الطالبات</title>
 </head>
@@ -45,13 +60,69 @@ $advisors = $collection->getAllDocuments();
             <h1> إسناد الطالبات </h1>
             <br>
 
-            <div class="continer">
-            <form>
-                <br><br>
-                <h5>: اختر مرشدة  -</h5>
+            <div class="continer" >
+                <div class="forms">
+                    
+
+                <?php
+                $count=0;
+                    // Check if the form is submitted
+                    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                    //Retrieve the selected option from the dropdown
+                    $selectedOption = isset($_POST["selectedOption"]) ? $_POST["selectedOption"] : '';
+
+                    //Retrieve the chosen items from the checklist
+                    $chosenChecklistItems = isset($_POST["checklist"]) ? $_POST["checklist"] : array();
+
+                    //Process the values
+                    //echo "Selected Option: " . $selectedOption . "<br>";
+                    //echo "Chosen Checklist Items: " . implode(", ", $chosenChecklistItems);
+                    $advisorUID = "";
+                    foreach ($advisors as $advisor) {
+                       if ($advisor['name'] == $selectedOption){
+                           $advisorUID = $advisor['uid'];
+                        }
+                        foreach ($chosenChecklistItems as $student1) {
+                            $count=$count+1;
+                          foreach ($documents as $document){
+                            if ( $student1 == $document['name']){
+                               $documentId = $document->id();
+                                $documentRef = $firestore->collection("students")->document($documentId);
+                                $documentRef->update([
+                                   ['path' => 'AdvisorUID', 'value' => $advisorUID]
+                                ]);
+                            }
+                          }
+                        }
+                    };
+                    ?>
+                    <script>
+                        document.getElementById("myForm").addEventListener("submit", function (event) {
+                        var messageFromPHP1 = "<?php
+                                                        if ($count > 0) {
+                                                            echo 'تم إسناد  '.$count.'  طالبة بنجاح';
+                                                        } else {
+                                                            echo '';
+                                                        } ?>";
+                                document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
+                                                    });
+
+                    </script>
+                    <?php
+
+
+                    }
+                ?>
+                
+            
+
+            <form id="myForm" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="f1">
                 <br>
-                <div class="LinkAdv">
-                <select name="dropdown">
+                <div class="dropdown-container">
+                <label for="options">: اختر مرشدة  -</label>
+                <br>
+                <select id="options" class="dropdown" name="selectedOption">
                 <?php
                 foreach ($advisors as $advisor) {
                     echo '<option>'.$advisor['name'].'</option>';
@@ -59,12 +130,54 @@ $advisors = $collection->getAllDocuments();
                 ?>
                 </select>
             </div>
-            </form>    
 
+            
+
+            <br>
+            <label>: اختر طالبات  -</label>
+            <br>
+        </div>
+
+
+
+            
+    
+        <div class="f2">
+            <table style="width: 450px;">
+                <tr>
+                    <th style="width:200px;">الاسم</th>
+                    <th style="width:50px;">اختيار</th>
+                </tr>
+                <?php
+                    //get all student info
+                    foreach ($students as $student) {
+                        echo '<tr>';
+                        echo '<td>' . $student['name'] . "</td>";
+                        echo '<td> <div class="checkboxContainer"> <label> <input type="checkbox" name="checklist[]" value="'.$student['name'].'"></label></div> '. "</td>";
+                        echo "</tr>";
+                        
+                    }
+                    ?>
+            </table>
+            <br>
+            <div class="buttonContainer">
+        <input class="button-1" type="submit" value="إسناد">
+                </div>
+        <br>
+                </div>
+                <div class="success-message" id="show1">
+            <span class="success-text" id="successmessage">
+            </span>
+        </div>
+        </form>
+        
+                </div>
+                
+        
 
             </div>
         </div>
-
+        
         <?php
         include('nav.php');
         ?>

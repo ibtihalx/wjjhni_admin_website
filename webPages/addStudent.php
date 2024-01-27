@@ -194,6 +194,7 @@ $firestore = new FirestoreClient([
                                             try {
                                                 $createdUser = $auth->createUser($userProperties);
                                                 $rowData['uid'] = $createdUser->uid;
+                                                $rowData['AdvisorUID'] = "";
                                                 $newDoc = $collection->add($rowData);
                                                 sendEmail($rowData['email'], $password);
                                                 $added = 1;
