@@ -120,7 +120,7 @@ $documents = $firestore->collection("students")->documents();
                 <div class="f1">
                 <br>
                 <div class="dropdown-container">
-                <label for="options">: اختر مرشدة  -</label>
+                <label for="options">: اختيار مرشدة  -</label>
                 <br>
                 <select id="options" class="dropdown" name="selectedOption">
                 <?php
@@ -134,7 +134,7 @@ $documents = $firestore->collection("students")->documents();
             
 
             <br>
-            <label>: اختر طالبات  -</label>
+            <label>: اختيار طالبات  -</label>
             <br>
         </div>
 

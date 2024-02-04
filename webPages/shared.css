@@ -528,3 +528,10 @@ text-shadow: 2px 2px 4px #9cb4cc;
   .button-1:focus {
     background-color: #8da5c8;
   }
+
+  #buttonss {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
