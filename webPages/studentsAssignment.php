@@ -66,6 +66,7 @@ $documents = $firestore->collection("students")->documents();
 
                 <?php
                 $count=0;
+                $successMessage=  "";
                     // Check if the form is submitted
                     if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     //Retrieve the selected option from the dropdown
@@ -78,15 +79,18 @@ $documents = $firestore->collection("students")->documents();
                     //echo "Selected Option: " . $selectedOption . "<br>";
                     //echo "Chosen Checklist Items: " . implode(", ", $chosenChecklistItems);
                     $advisorUID = "";
+                    $successMessage = "لم يتم الإسناد, الرجاء المحاولة مرة أخرى";
                     foreach ($advisors as $advisor) {
                        if ($advisor['name'] == $selectedOption){
                            $advisorUID = $advisor['uid'];
                         }
                         foreach ($chosenChecklistItems as $student1) {
-                            $count=$count+1;
                           foreach ($documents as $document){
                             if ( $student1 == $document['name']){
-                               $documentId = $document->id();
+                                $count=$count+1;
+                                $successMessage = "تم إسناد الطالبات بنجاح";
+                                
+                                $documentId = $document->id();
                                 $documentRef = $firestore->collection("students")->document($documentId);
                                 $documentRef->update([
                                    ['path' => 'AdvisorUID', 'value' => $advisorUID]
@@ -95,30 +99,21 @@ $documents = $firestore->collection("students")->documents();
                           }
                         }
                     };
-                    ?>
-                    <script>
-                        document.getElementById("myForm").addEventListener("submit", function (event) {
-                        var messageFromPHP1 = "<?php
-                                                        if ($count > 0) {
-                                                            echo 'تم إسناد  '.$count.'  طالبة بنجاح';
-                                                        } else {
-                                                            echo '';
-                                                        } ?>";
-                                document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
-                                                    });
-
-                    </script>
-                    <?php
-
 
                     }
                 ?>
                 
-            
+            <div class="error-message" id="show">
+                <span class="error-text" id="errormessage">
+                </span>
+            </div>
+            <div class="success-message" id="show1">
+                <span class="success-text" id="successmessage">
+                </span>
+            </div>
 
             <form id="myForm" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <div class="f1">
-                <br>
                 <div class="dropdown-container">
                 <label for="options">: اختيار مرشدة  -</label>
                 <br>
@@ -165,18 +160,34 @@ $documents = $firestore->collection("students")->documents();
                 </div>
         <br>
                 </div>
-                <div class="success-message" id="show1">
-            <span class="success-text" id="successmessage">
-            </span>
-        </div>
+                
         </form>
         
                 </div>
+
+
                 
         
 
             </div>
         </div>
+        <script>
+            function showSuccessMessage() {
+                const successMessage = "<?php  echo $successMessage; ?>";
+                
+                const successTextElement = document.getElementById("<?php if ( $count > 0 ){ echo 'successmessage'; }  else {  echo 'errormessage'; }?>");
+
+                if (successMessage) {
+                    successTextElement.innerText = successMessage;
+
+                    document.getElementById("<?php if ( $count > 0 ){ echo 'show1'; }  else {  echo 'show'; }?>").style.display = "block";
+                }
+            }
+
+    // Call the function to show the success message
+    showSuccessMessage();
+
+        </script>
         
         <?php
         include('nav.php');
