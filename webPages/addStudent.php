@@ -73,12 +73,20 @@ $firestore = new FirestoreClient([
                     <h4> صياغة الملف المطلوبة: </h4>
                     <img src="images/stdsample.png" alt="studentsSample">
                     <br>
+                    <form action="download.php" method="post">
+                        <div class="buttonContainer">
+                            <button type="submit" name="download_csv_form1" class="button-1">Download CSV File</button>
+                        </div>
+                    </form>
+                    <br><br>
                     <form action="" method="post" enctype="multipart/form-data" id="stu_file">
                         <p id="file_hint">
                             يجب أن تكون صيغة الملف
                             "csv."
 
-                        </p><br>
+                        </p>
+
+                        <br>
                         <label for="fileInput" class="custom-file-upload">تحميل ملف
                             <input type="file" name="file" accept=".csv" id="fileInput" style="display:none;">
                         </label><br>
