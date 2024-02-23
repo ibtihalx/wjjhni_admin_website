@@ -109,6 +109,14 @@ if (!isset($_SESSION['logged_in'])) {
                     <button class="btn_card" onclick="location.href= 'academicForms.php'">أضف</button><br>
                     <button class="btn_card" onclick="location.href= 'academicForms.php'">حذف</button><br>
                 </div>
+                <div class="box">
+                    <div><img src="images/rating-rate-svgrepo-com.svg"></div>
+
+                    <h2>تقييم المرشدات</h2>
+                    <br>
+                    <button class="btn_card" onclick="location.href= 'ratingView.php'">عرض</button><br>
+
+                </div>
 
 
 
