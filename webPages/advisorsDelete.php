@@ -36,7 +36,9 @@ if (!isset($_SESSION['logged_in'])) {
             <br>
 
             <div class="continer">
+                <div class="delete_hint">
 
+                </div>
             </div>
         </div>
 

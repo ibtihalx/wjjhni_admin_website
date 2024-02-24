@@ -3,6 +3,14 @@ $_SESSION['page'] = 'studentsDelete.php';
 if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
+require '../vendor/autoload.php';
+
+use webPages\models\Firestore;
+
+$f = new Firestore();
+
+$collection = $f->setCollectionName('students');
+$students = $collection->getAllstudentsOrdered();
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +44,51 @@ if (!isset($_SESSION['logged_in'])) {
             <br>
 
             <div class="continer">
+                <div class="delete_hint">
+                    <h3 id="del_header">لحذف طالبة يرجى اتباع الآتي:</h3>
+                    <br>
+                    <ul>
+                        <li>اختيار الطالبات المراد حذفهن من الجدول</li>
+                        <li>الضغط على زر تأكيد الحذف</li>
+                    </ul>
+                </div>
+                <table>
+                    <tr>
+                        <th>
+                            الاسم
+                        </th>
+                        <th>
+                            الرقم الجامعي
+                        </th>
+                        <th>
+                            البريد الإلكتروني
+                        </th>
+                        <th>
+                            التخصص
+                        </th>
+                    </tr>
+
+
+
+
+                    <?php
+                    //get all student info
+                    foreach ($students as $student) {
+                        echo '<tr>';
+                        echo '<td>' . $student['name'] . "</td>";
+                        echo '<td>' . $student['id'] . "</td>";
+                        echo '<td class="stu_email">' . $student['email'] . "</td>";
+                        echo '<td>' . $student['major'] . "</td>";
+                       
+                       
+                        echo "</tr>";
+                    }
+                    ?>
+
+
+
+
+                </table>
 
             </div>
         </div>

@@ -119,4 +119,21 @@ else{
         return !$snapshot->isEmpty();
     }
 
+
+    public function getAllstudentsOrdered(): array
+    {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        $collection = $this->firestore->collection($this->collectionName)->orderBy("id");
+        $documents = [];
+
+        foreach ($collection->documents() as $document) {
+            $documents[] = $document->data();
+        }
+
+        return $documents;
+    }
+
 }
