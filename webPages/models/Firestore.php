@@ -120,13 +120,13 @@ else{
     }
 
 
-    public function getAllstudentsOrdered(): array
+    public function getAlldocumentsOrdered(String $field): array
     {
         if (empty($this->collectionName)) {
             die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
         }
 
-        $collection = $this->firestore->collection($this->collectionName)->orderBy("id");
+        $collection = $this->firestore->collection($this->collectionName)->orderBy($field);
         $documents = [];
 
         foreach ($collection->documents() as $document) {

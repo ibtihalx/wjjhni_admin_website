@@ -4,23 +4,50 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 require '../vendor/autoload.php';
+       
 
 use webPages\models\Firestore;
 
 $f = new Firestore();
 
 $collection = $f->setCollectionName('students');
-$students = $collection->getAllstudentsOrdered();
+$students = $collection->getAlldocumentsOrdered("id");
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".confim_delete").hide();
+
+            $(".delte_btn").click(function() {
+                $(".confim_delete").show();
+                $('.del_page_div  > *:not(.confim_delete)').css("filter", "blur(2px)");
+                $(".confim_delete").css("filter", "none");
+
+
+
+            });
+
+            $(".no_del_btn").click(function() {
+               
+                $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+
+                $(".confim_delete").hide();
+            });
+        });
+    </script>
+
     <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title>حذف الطالبات</title>
 </head>
@@ -44,55 +71,69 @@ $students = $collection->getAllstudentsOrdered();
             <br>
 
             <div class="continer">
-                <div class="delete_hint">
-                    <h3 id="del_header">لحذف طالبة يرجى اتباع الآتي:</h3>
-                    <br>
-                    <ul>
-                        <li>اختيار الطالبات المراد حذفهن من الجدول</li>
-                        <li>الضغط على زر تأكيد الحذف</li>
-                    </ul>
+                <div class="del_page_div">
+                    <div class="delete_hint">
+                        <h3 id="del_header">لحذف طالبة يرجى اتباع الآتي:</h3>
+                        <br>
+                        <ul>
+                            <li>اختيار الطالبات المراد حذفهن من الجدول</li>
+                            <li>الضغط على زر تأكيد الحذف</li>
+                        </ul>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>
+                                اختيار
+                            </th>
+                            <th>
+                                الاسم
+                            </th>
+                            <th>
+                                الرقم الجامعي
+                            </th>
+                            <th>
+                                البريد الإلكتروني
+                            </th>
+                            <th>
+                                التخصص
+                            </th>
+                        </tr>
+
+
+
+
+                        <?php
+                        //get all student info
+                        foreach ($students as $student) {
+                            echo '<tr>';
+                            echo "<td> <input type='checkbox' ></td>";
+                            echo '<td>' . $student['name'] . "</td>";
+                            echo '<td>' . $student['id'] . "</td>";
+                            echo '<td class="stu_email">' . $student['email'] . "</td>";
+                            echo '<td>' . $student['major'] . "</td>";
+
+
+                            echo "</tr>";
+                        }
+                        ?>
+
+
+
+
+                    </table>
+
+                    <button type="button" class="delte_btn" name="delete_stu"> <i class="fa fa-trash"></i> حذف </button>
+                    <div class="confim_delete" id="conf">
+                        <h4>هل أنت متأكد من الحذف؟</h4>
+                        <br>
+                        <button class="no_del_btn">لا</button>&nbsp;&nbsp;
+                        <button class="yes_del_btn">نعم</button>
+
+                    </div>
                 </div>
-                <table>
-                    <tr>
-                        <th>
-                            الاسم
-                        </th>
-                        <th>
-                            الرقم الجامعي
-                        </th>
-                        <th>
-                            البريد الإلكتروني
-                        </th>
-                        <th>
-                            التخصص
-                        </th>
-                    </tr>
-
-
-
-
-                    <?php
-                    //get all student info
-                    foreach ($students as $student) {
-                        echo '<tr>';
-                        echo '<td>' . $student['name'] . "</td>";
-                        echo '<td>' . $student['id'] . "</td>";
-                        echo '<td class="stu_email">' . $student['email'] . "</td>";
-                        echo '<td>' . $student['major'] . "</td>";
-                       
-                       
-                        echo "</tr>";
-                    }
-                    ?>
-
-
-
-
-                </table>
 
             </div>
         </div>
-
         <?php
         include('nav.php');
         ?>
