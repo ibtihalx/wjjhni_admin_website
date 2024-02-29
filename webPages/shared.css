@@ -686,6 +686,11 @@ gap: 4%;
     direction: rtl;
 cursor: pointer;
 }
+.delte_btn[disabled] {
+    background-color: rgba(128, 128, 128);
+    pointer-events: none;
+    border-color: rgba(128, 128, 128);
+}
 .confim_delete{
     
     font-size: larger;

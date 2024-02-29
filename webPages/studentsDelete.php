@@ -4,7 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 require '../vendor/autoload.php';
-       
+
 
 use webPages\models\Firestore;
 
@@ -32,19 +32,17 @@ $students = $collection->getAlldocumentsOrdered("id");
                 $(".confim_delete").show();
                 $('.del_page_div  > *:not(.confim_delete)').css("filter", "blur(2px)");
                 $(".confim_delete").css("filter", "none");
-
-
-
             });
 
             $(".no_del_btn").click(function() {
-               
+
                 $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
 
                 $(".confim_delete").hide();
             });
         });
     </script>
+
 
     <link rel="stylesheet" type="text/css" href="shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -100,36 +98,38 @@ $students = $collection->getAlldocumentsOrdered("id");
                         </tr>
 
 
+                        <form method="POST">
+
+                            <?php
+
+                            //get all student info
+                            foreach ($students as $student) {
+                                echo '<tr>';
+                                echo "<td> <input type='checkbox' class='check'  name='studentsUID[]' value='" . $student['uid'] . "' ></td>";
+                                echo '<td>' . $student['name'] . "</td>";
+                                echo '<td>' . $student['id'] . "</td>";
+                                echo '<td class="stu_email">' . $student['email'] . "</td>";
+                                echo '<td>' . $student['major'] . "</td>";
 
 
-                        <?php
-                        //get all student info
-                        foreach ($students as $student) {
-                            echo '<tr>';
-                            echo "<td> <input type='checkbox' ></td>";
-                            echo '<td>' . $student['name'] . "</td>";
-                            echo '<td>' . $student['id'] . "</td>";
-                            echo '<td class="stu_email">' . $student['email'] . "</td>";
-                            echo '<td>' . $student['major'] . "</td>";
-
-
-                            echo "</tr>";
-                        }
-                        ?>
+                                echo "</tr>";
+                            }
+                            ?>
 
 
 
 
                     </table>
 
-                    <button type="button" class="delte_btn" name="delete_stu"> <i class="fa fa-trash"></i> حذف </button>
+                    <button type="button" class="delte_btn" name="delete_stu" id="deleteButton" disabled> <i class="fa fa-trash"></i> حذف </button>
                     <div class="confim_delete" id="conf">
                         <h4>هل أنت متأكد من الحذف؟</h4>
                         <br>
-                        <button class="no_del_btn">لا</button>&nbsp;&nbsp;
-                        <button class="yes_del_btn">نعم</button>
+                        <button type="submit" class="no_del_btn">لا</button>&nbsp;&nbsp;
+                        <button class="yes_del_btn" name="confiremd_delete">نعم</button>
 
                     </div>
+                    </form>
                 </div>
 
             </div>
@@ -141,3 +141,37 @@ $students = $collection->getAlldocumentsOrdered("id");
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['confiremd_delete'])) {
+
+    if (isset($_POST['studentsUID'])) {
+        $text = "";
+        foreach ($_POST['studentsUID'] as $studentuid) {
+
+            $text = $text . $studentuid . "***new line ***";
+        }
+        print($text);
+    }
+}
+
+
+?>
+
+<script>
+    // Enable delete button if at least one checkbox is checked
+    const checkboxes = document.querySelectorAll('.check');
+    const deleteButton = document.getElementById('deleteButton');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            let atLeastOneChecked = false;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    atLeastOneChecked = true;
+                }
+            });
+            deleteButton.disabled = !atLeastOneChecked;
+        });
+    });
+</script>
