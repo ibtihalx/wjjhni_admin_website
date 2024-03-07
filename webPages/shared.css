@@ -729,5 +729,32 @@ section .details span {
     width: 36%;
     color: rgb(70, 69, 69);
     display: none;
-    
+
+}
+
+.searchDiv {
+    direction: rtl;
+    padding: 1%;
+    background-color: white;
+    width: 36%;
+    border-radius: 4px;
+}
+
+#searchInput:focus {
+    background-color: #f0f0f0;
+      
+        border-color: #375E98;
+       
+        
+        box-shadow: 0 0 5px #375E98;
+}
+
+ #searchInput {
+    border: 1px solid #ccc;
+    padding: 1%;
+    width: 90%;
+    font-size: large;
+    border: none;
+
+
 }

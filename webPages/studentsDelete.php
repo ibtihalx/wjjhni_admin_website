@@ -68,17 +68,30 @@ $students = $collection->getAlldocumentsOrdered("id");
                         });
 
                         $("#con_delete_stu").css("display", "block");
-                        $("#con_text").html("تم حذف "+msg+" طالبات");
+                        $("#con_text").html("تم حذف " + msg + " طالبات");
 
-                        //    $("con_text").innerHTML = "طالبات" + msg + "تم حذف ";
+
 
                     }
                 });
             });
-
-
-
-
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#searchInput').keyup(function() {
+                var query = $(this).val();
+                $.ajax({
+                    url: 'search.php', // Server-side script to handle search
+                    method: 'POST',
+                    data: {
+                        query: query
+                    },
+                    success: function(response) {
+                        $('#dataBody').html(response);
+                    }
+                });
+            });
         });
     </script>
 
@@ -122,6 +135,8 @@ $students = $collection->getAlldocumentsOrdered("id");
                         <i class="fa fa-check-circle-o" style="font-size:48px;color:green" aria-hidden="true"></i>
                         <h3 id="con_text">تم حذف 4 طالبات بنجاح</h3>
                     </div>
+                    <div class="searchDiv"><input type="text" id="searchInput" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
+
                     <table>
                         <tr>
                             <th>
@@ -185,23 +200,7 @@ $students = $collection->getAlldocumentsOrdered("id");
 </body>
 
 </html>
-<!-- <?php
 
-        if (isset($_POST['confiremd_delete'])) {
-
-            if (isset($_POST['studentsUID'])) {
-                $text = "";
-                foreach ($_POST['studentsUID'] as $studentuid) {
-
-                    $text = $text . $studentuid . "***new line ***";
-                }
-                $show_confirmed_delete = true;
-                print($text);
-            }
-        }
-
-
-        ?> -->
 
 <script>
     // Enable delete button if at least one checkbox is checked
