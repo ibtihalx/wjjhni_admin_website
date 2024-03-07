@@ -32,14 +32,53 @@ $students = $collection->getAlldocumentsOrdered("id");
                 $(".confim_delete").show();
                 $('.del_page_div  > *:not(.confim_delete)').css("filter", "blur(2px)");
                 $(".confim_delete").css("filter", "none");
+
+                $(".no_del_btn").click(function() {
+
+                    $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+
+                    $(".confim_delete").hide();
+                });
             });
 
-            $(".no_del_btn").click(function() {
 
-                $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            $(".yes_del_btn").click(function() {
+                event.preventDefault(); // Prevent default form submissio
 
                 $(".confim_delete").hide();
+                $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+                var selectedStudents = [];
+                $('input[name="studentsUID[]"]:checked').each(function() {
+                    selectedStudents.push($(this).val());
+                });
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        students: selectedStudents
+                    },
+                    url: "deleteScript.php",
+                    success: function(msg) {
+                        selectedStudents.forEach(function(studentRow) {
+                            $("#" + studentRow).remove();
+                        });
+
+                        $("#con_delete_stu").css("display", "block");
+                        $("#con_text").html("تم حذف "+msg+" طالبات");
+
+                        //    $("con_text").innerHTML = "طالبات" + msg + "تم حذف ";
+
+                    }
+                });
             });
+
+
+
+
         });
     </script>
 
@@ -78,6 +117,11 @@ $students = $collection->getAlldocumentsOrdered("id");
                             <li>الضغط على زر تأكيد الحذف</li>
                         </ul>
                     </div>
+
+                    <div id="con_delete_stu">
+                        <i class="fa fa-check-circle-o" style="font-size:48px;color:green" aria-hidden="true"></i>
+                        <h3 id="con_text">تم حذف 4 طالبات بنجاح</h3>
+                    </div>
                     <table>
                         <tr>
                             <th>
@@ -104,7 +148,7 @@ $students = $collection->getAlldocumentsOrdered("id");
 
                             //get all student info
                             foreach ($students as $student) {
-                                echo '<tr>';
+                                echo "<tr id='" . $student['uid'] . "'>";
                                 echo "<td> <input type='checkbox' class='check'  name='studentsUID[]' value='" . $student['uid'] . "' ></td>";
                                 echo '<td>' . $student['name'] . "</td>";
                                 echo '<td>' . $student['id'] . "</td>";
@@ -141,22 +185,23 @@ $students = $collection->getAlldocumentsOrdered("id");
 </body>
 
 </html>
-<?php
+<!-- <?php
 
-if (isset($_POST['confiremd_delete'])) {
+        if (isset($_POST['confiremd_delete'])) {
 
-    if (isset($_POST['studentsUID'])) {
-        $text = "";
-        foreach ($_POST['studentsUID'] as $studentuid) {
+            if (isset($_POST['studentsUID'])) {
+                $text = "";
+                foreach ($_POST['studentsUID'] as $studentuid) {
 
-            $text = $text . $studentuid . "***new line ***";
+                    $text = $text . $studentuid . "***new line ***";
+                }
+                $show_confirmed_delete = true;
+                print($text);
+            }
         }
-        print($text);
-    }
-}
 
 
-?>
+        ?> -->
 
 <script>
     // Enable delete button if at least one checkbox is checked

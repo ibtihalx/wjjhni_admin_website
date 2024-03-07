@@ -136,4 +136,28 @@ else{
         return $documents;
     }
 
+
+
+    public function deleteDocumentsByFieldValue(string $fieldName, $fieldValue): void
+    {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        if (empty($fieldName) || empty($fieldValue)) {
+            die("Provide both field name and field value to delete documents.");
+        }
+
+        $collection = $this->firestore->collection($this->collectionName);
+
+        // Query documents where the specified field matches the given value
+        $query = $collection->where($fieldName, '=', $fieldValue);
+        $documents = $query->documents();
+
+        foreach ($documents as $document) {
+            $document->reference()->delete();
+            echo "Document with ID " . $document->id() . " deleted successfully.\n";
+        }
+    }
+    
 }
