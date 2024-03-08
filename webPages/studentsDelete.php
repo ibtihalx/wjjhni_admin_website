@@ -24,6 +24,8 @@ $students = $collection->getAlldocumentsOrdered("id");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
     <script>
         $(document).ready(function() {
             $(".confim_delete").hide();
@@ -79,18 +81,30 @@ $students = $collection->getAlldocumentsOrdered("id");
     </script>
     <script>
         $(document).ready(function() {
+            let timer;
             $('#searchInput').keyup(function() {
-                var query = $(this).val();
-                $.ajax({
-                    url: 'search.php', // Server-side script to handle search
-                    method: 'POST',
-                    data: {
-                        query: query
-                    },
-                    success: function(response) {
-                        $('#dataBody').html(response);
-                    }
-                });
+
+                clearTimeout(timer);
+                timer = setTimeout(function() {
+                    var query = $('#searchInput').val();
+                    // alert(query);
+                    $.ajax({
+                        url: 'search.php', // Server-side script to handle search
+                        method: 'POST',
+                        data: {
+                            Query: query
+                        },
+                        success: function(response) {
+                            if (response != null) {
+                                $('#dataBody').html(response);
+                            }
+
+                        }
+                    });
+                }, 1000);
+
+
+
             });
         });
     </script>
@@ -138,43 +152,46 @@ $students = $collection->getAlldocumentsOrdered("id");
                     <div class="searchDiv"><input type="text" id="searchInput" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
 
                     <table>
-                        <tr>
-                            <th>
-                                اختيار
-                            </th>
-                            <th>
-                                الاسم
-                            </th>
-                            <th>
-                                الرقم الجامعي
-                            </th>
-                            <th>
-                                البريد الإلكتروني
-                            </th>
-                            <th>
-                                التخصص
-                            </th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>
+                                    اختيار
+                                </th>
+                                <th>
+                                    الاسم
+                                </th>
+                                <th>
+                                    الرقم الجامعي
+                                </th>
+                                <th>
+                                    البريد الإلكتروني
+                                </th>
+                                <th>
+                                    التخصص
+                                </th>
+                            </tr>
+                        </thead>
 
 
                         <form method="POST">
+                            <tbody id="dataBody">
 
-                            <?php
+                                <?php
 
-                            //get all student info
-                            foreach ($students as $student) {
-                                echo "<tr id='" . $student['uid'] . "'>";
-                                echo "<td> <input type='checkbox' class='check'  name='studentsUID[]' value='" . $student['uid'] . "' ></td>";
-                                echo '<td>' . $student['name'] . "</td>";
-                                echo '<td>' . $student['id'] . "</td>";
-                                echo '<td class="stu_email">' . $student['email'] . "</td>";
-                                echo '<td>' . $student['major'] . "</td>";
+                                //get all student info
+                                foreach ($students as $student) {
+                                    echo "<tr id='" . $student['uid'] . "'>";
+                                    echo "<td> <input type='checkbox' class='check'  name='studentsUID[]' value='" . $student['uid'] . "' ></td>";
+                                    echo '<td>' . $student['name'] . "</td>";
+                                    echo '<td>' . $student['id'] . "</td>";
+                                    echo '<td class="stu_email">' . $student['email'] . "</td>";
+                                    echo '<td>' . $student['major'] . "</td>";
 
 
-                                echo "</tr>";
-                            }
-                            ?>
-
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
 
 
 
