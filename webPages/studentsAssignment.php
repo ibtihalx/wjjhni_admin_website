@@ -88,7 +88,7 @@ $documents = $firestore->collection("students")->documents();
                           foreach ($documents as $document){
                             if ( $student1 == $document['name']){
                                 $count=$count+1;
-                                $successMessage = "تم إسناد الطالبات بنجاح";
+                                $successMessage = "تم إسناد الطالبة\الطالبات بنجاح";
                                 
                                 $documentId = $document->id();
                                 $documentRef = $firestore->collection("students")->document($documentId);

@@ -75,7 +75,7 @@ $firestore = new FirestoreClient([
                     <br>
                     <form action="download.php" method="post">
                         <div class="buttonContainer">
-                            <button type="submit" name="download_csv_form2" class="button-1">Download CSV File</button>
+                            <button type="submit" name="download_csv_form2" class="button-1">تحميل نموذج</button>
                         </div>
                     </form>
                     <br><br>
