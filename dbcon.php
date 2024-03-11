@@ -23,6 +23,7 @@ withServiceAccount('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json')
 
   $database = $factory->createDatabase();
   $auth = $factory->createAuth();
+  
   // $user = $auth->getUserByEmail("try@gmail.com");
 
   ?>

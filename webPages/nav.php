@@ -13,8 +13,8 @@
     <a <?php if ($_SESSION['page'] == 'plans.php') { ?> class="active" <?php   }  ?>href="plans.php">الخطط الدراسية</a>
     <a <?php if ($_SESSION['page'] == 'studentsDelete.php') { ?> class="active" <?php   }  ?>href="studentsDelete.php"> حذف الطالبات </a>
     <a <?php if ($_SESSION['page'] == 'advisorsDelete.php') { ?> class="active" <?php   }  ?>href="advisorsDelete.php"> حذف المرشدات الأكاديميات</a>
-    <a <?php if ($_SESSION['page'] == 'importantDates.php') { ?> class="active" <?php   }  ?>href="importantDates.php">   المواعيد المهمة</a>
-
+    <a <?php if ($_SESSION['page'] == 'importantDates.php') { ?> class="active" <?php   }  ?>href="importantDates.php"> المواعيد المهمة</a>
+    <a <?php if ($_SESSION['page'] == 'ratingView.php') { ?> class="active" <?php   }  ?>href="ratingView.php"> عرض تقييم المرشدات</a>
 
 
 </div>
