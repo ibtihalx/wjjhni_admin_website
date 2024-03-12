@@ -729,7 +729,7 @@ section .details span {
     border-color: #274e89;
 }
 
-#con_delete_stu {
+#con_delete_stu,#con_delete_adv {
     text-align: center;
     background-color: rgb(217, 245, 213);
     border-style: solid;
