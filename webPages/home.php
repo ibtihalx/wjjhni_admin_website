@@ -106,8 +106,8 @@ if (!isset($_SESSION['logged_in'])) {
 
                     <h2>النماذج الأكاديمية</h2>
                     <br>
-                    <button class="btn_card" onclick="location.href= 'academicForms.php'">أضف</button><br>
-                    <button class="btn_card" onclick="location.href= 'academicForms.php'">حذف</button><br>
+                    <button class="btn_card" onclick="location.href= 'academicForms.php'">تعديل</button><br>
+                   
                 </div>
                 <div class="box">
                     <div><img src="images/rating-rate-svgrepo-com.svg"></div>

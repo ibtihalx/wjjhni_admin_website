@@ -22,6 +22,9 @@ $advisors = $collection->getAlldocumentsOrdered("name");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
         $(document).ready(function() {
             $(".confim_delete").hide();
@@ -30,18 +33,100 @@ $advisors = $collection->getAlldocumentsOrdered("name");
                 $(".confim_delete").show();
                 $('.del_page_div  > *:not(.confim_delete)').css("filter", "blur(2px)");
                 $(".confim_delete").css("filter", "none");
+
+                $(".no_del_btn").click(function() {
+
+                    $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+
+                    $(".confim_delete").hide();
+                });
             });
-            $(".no_del_btn").click(function() {
 
-                $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
-
-                $(".confim_delete").hide();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Enable delete button if at least one checkbox is checked
+            $(document).on('change', '.check', function() {
+                let atLeastOneChecked = false;
+                $('.check').each(function() {
+                    if ($(this).prop('checked')) {
+                        atLeastOneChecked = true;
+                    }
+                });
+                $('#deleteButton').prop('disabled', !atLeastOneChecked);
             });
         });
     </script>
-    <link rel="stylesheet" type="text/css" href="shared.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>حذف الطالبات</title>
+    <script>
+        $(document).ready(function() {
+
+            let timer;
+            $('#searchInput').keyup(function() {
+
+                clearTimeout(timer);
+                timer = setTimeout(function() {
+                    var query = $('#searchInput').val();
+
+                    $.ajax({
+                        url: 'search.php', // Server-side script to handle search
+                        method: 'POST',
+                        data: {
+                            Name: query
+                        },
+                        success: function(response) {
+                            if (response != null) {
+                                $('#advisorsBody').html(response);
+                            }
+
+                        }
+                    });
+                }, 1000);
+
+
+
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(".progress").hide();
+            $(".yes_del_btn").click(function() {
+                event.preventDefault(); // Prevent default form submission
+                $(".check").prop('disabled', true); // Disable checkboxes
+                $(".progress").show();
+
+                $(".confim_delete").hide();
+                $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
+                var selectedAdviosrs = [];
+                $('input[name="advisorsUID[]"]:checked').each(function() {
+                    selectedAdviosrs.push($(this).val());
+                });
+
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        advisors: selectedAdviosrs
+                    },
+                    url: "deleteScript.php",
+                    success: function(msg) {
+                        $(".check").prop('disabled', false); // Enable checkboxes
+                        $(".progress").hide();
+                        selectedAdviosrs.forEach(function(advisorRow) {
+                            $("#" + advisorRow).remove();
+                        });
+
+                        $("#con_delete_adv").css("display", "block");
+                        $("#con_text").html("تم حذف " + msg + " مرشدات");
+
+
+
+                    }
+                });
+            });
+        });
+    </script>
+    <title>حذف المرشدات</title>
 </head>
 
 
@@ -69,38 +154,50 @@ $advisors = $collection->getAlldocumentsOrdered("name");
                             <li>سيتم إسناد الطالبات التابعات للمرشدات المحذوفات إلى مرشدات أخريات</li>
                         </ul>
                     </div>
+                    <div id="con_delete_adv">
+                        <i class="fa fa-check-circle-o" style="font-size:48px;color:green" aria-hidden="true"></i>
+                        <h3 id="con_text">تم حذف 4 مرشدات بنجاح</h3>
+                    </div>
+                    <div class="searchDiv"><input type="text" id="searchInput" placeholder="بحث بالاسم ">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
+                    <div class="progress">
+                        <div class="progress__ring" role="progressbar" aria-describedby="progress__message" tabindex="0"></div>
+
+                        <div class="progress__message" id="progress__message">..جاري الحذف</div>
+                    </div>
                     <table>
-                        <tr>
-                            <th>
-                                اختيار
-                            </th>
-                            <th>
-                                الاسم
-                            </th>
+                        <thead>
+                            <tr>
+                                <th>
+                                    اختيار
+                                </th>
+                                <th>
+                                    الاسم
+                                </th>
 
-                            <th>
-                                البريد الإلكتروني
-                            </th>
-                            <th>
-                                القسم
-                            </th>
-                        </tr>
+                                <th>
+                                    البريد الإلكتروني
+                                </th>
+                                <th>
+                                    القسم
+                                </th>
+                            </tr>
+                        </thead>
+                        <form method="POST">
+                            <tbody id="advisorsBody">
 
 
-
-
-                        <?php
-                        //get all advisors info
-                        foreach ($advisors as $advisor) {
-                            echo "<tr id='" . $advisor['uid'] . "'>";
-                            echo "<td> <input type='checkbox' class='check'></td>";
-                            echo '<td>' . $advisor['name'] . "</td>";
-                            echo '<td class="stu_email">' . $advisor['email'] . "</td>";
-                            echo '<td>' . $advisor['department'] . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-
+                                <?php
+                                //get all advisors info
+                                foreach ($advisors as $advisor) {
+                                    echo "<tr id='" . $advisor['uid'] . "'>";
+                                    echo "<td> <input type='checkbox' class='check' name='advisorsUID[]' value='" . $advisor['uid'] . "'></td>";
+                                    echo '<td>' . $advisor['name'] . "</td>";
+                                    echo '<td class="stu_email">' . $advisor['email'] . "</td>";
+                                    echo '<td>' . $advisor['department'] . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
 
 
 
@@ -114,6 +211,7 @@ $advisors = $collection->getAlldocumentsOrdered("name");
                         <button class="yes_del_btn">نعم</button>
 
                     </div>
+                    </form>
                 </div>
 
             </div>
@@ -125,21 +223,3 @@ $advisors = $collection->getAlldocumentsOrdered("name");
 </body>
 
 </html>
-
-<script>
-    // Enable delete button if at least one checkbox is checked
-    const checkboxes = document.querySelectorAll('.check');
-    const deleteButton = document.getElementById('deleteButton');
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            let atLeastOneChecked = false;
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    atLeastOneChecked = true;
-                }
-            });
-            deleteButton.disabled = !atLeastOneChecked;
-        });
-    });
-</script>

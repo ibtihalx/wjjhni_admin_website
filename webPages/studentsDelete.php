@@ -5,7 +5,7 @@ if (!isset($_SESSION['logged_in'])) {
 }
 require '../vendor/autoload.php';
 
-
+     
 use webPages\models\Firestore;
 
 $f = new Firestore();
@@ -42,7 +42,6 @@ $students = $collection->getAlldocumentsOrdered("id");
                     $(".confim_delete").hide();
                 });
             });
-
 
         });
     </script>
@@ -94,6 +93,7 @@ $students = $collection->getAlldocumentsOrdered("id");
                 timer = setTimeout(function() {
                     var query = $('#searchInput').val();
                     // alert(query);
+                   
                     $.ajax({
                         url: 'search.php', // Server-side script to handle search
                         method: 'POST',
