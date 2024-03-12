@@ -641,6 +641,38 @@ section .details span {
     color: white;
 }
 
+#rating_activation {
+   margin: auto;
+    text-align: center;
+    background-color: white;
+    width: 56%;
+    padding: 1%;
+    margin-bottom: 16px;
+    direction: rtl;
+}
+#btn_active{
+width:40%;
+padding: 1%;
+background-color: rgb(33, 174, 33);
+color: white;
+border-radius: 4px;
+border-color: rgb(33, 174, 33);
+font-size:1rem ;
+font-weight: bolder;
+    cursor: pointer;
+}
+#btn_notActive {
+    width: 40%;
+    padding: 1%;
+    background-color: rgb(208, 79, 79);
+    color: white;
+    border-radius: 4px;
+    border-color: rgb(208, 79, 79);
+    font-size: 1rem;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
 /* delete students */
 .delete_hint {
     text-align: center;
@@ -666,16 +698,16 @@ section .details span {
     width: 80%;
     height: 200%;
     display: flex;
-    
+
     /* justify-content: center; */
     flex-direction: column;
     background-color: transparent;
     background-color: #CFD8E1;
-    margin-bottom: 0%;   
+    margin-bottom: 0%;
     align-items: center;
     gap: 4%;
-  
-   padding: 1%;
+
+    padding: 1%;
     box-sizing: border-box;
     position: absolute;
 }
@@ -729,7 +761,8 @@ section .details span {
     border-color: #274e89;
 }
 
-#con_delete_stu,#con_delete_adv {
+#con_delete_stu,
+#con_delete_adv {
     text-align: center;
     background-color: rgb(217, 245, 213);
     border-style: solid;

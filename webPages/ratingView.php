@@ -26,6 +26,23 @@ if (!isset($_SESSION['logged_in'])) {
 
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // $.ajax(
+            //     url: 'checkActive.php' // Server-side script to handle search
+            //     method: 'POST',
+               
+            //     success: function(response) {
+                   
+            //             $('#dataBody').html(response);
+            //         },
+
+                
+            // );
+
+
+        });
+    </script>
 
     <link rel="stylesheet" type="text/css" href="shared.css">
 
@@ -49,8 +66,15 @@ if (!isset($_SESSION['logged_in'])) {
 
             <h1> تقييم المرشدات</h1>
             <br>
+            <div id="rating_activation">
+                <button id="btn_active">تفعيل فترة التقييم</button>&nbsp; &nbsp;&nbsp;&nbsp;
+                <button id="btn_notActive">إلغاء تفعيل فترة التقييم</button>
+                <br><br>
+                <h3>فترة التقييم مفعلة الآن</h3>
+            </div>
 
             <div class="continer">
+
                 <table>
                     <tr>
                         <th>اسم المرشدة</th>
