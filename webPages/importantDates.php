@@ -113,7 +113,7 @@ $added=0;
                                 <div>
                                 <table>
                     <tr>
-                        <th style="width:300px;">
+                        <th style="width:350px;">
                             العنوان
                         </th>
                         <th style="width:200px;">
