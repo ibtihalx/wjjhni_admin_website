@@ -156,7 +156,7 @@ else{
 
         foreach ($documents as $document) {
             $document->reference()->delete();
-            echo "Document with ID " . $document->id() . " deleted successfully.\n";
+            // echo "Document with ID " . $document->id() . " deleted successfully.\n";
         }
     }
 
@@ -180,5 +180,7 @@ else{
 
         return $documents;
     }
+
+ 
     
 }

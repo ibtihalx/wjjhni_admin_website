@@ -48,9 +48,11 @@ $students = $collection->getAlldocumentsOrdered("id");
     </script>
     <script>
         $(document).ready(function() {
-
+            $(".progress").hide();
             $(".yes_del_btn").click(function() {
-                event.preventDefault(); // Prevent default form submissio
+                event.preventDefault(); // Prevent default form submission
+                $(".check").prop('disabled', true); // Disable checkboxes
+                $(".progress").show();
 
                 $(".confim_delete").hide();
                 $('.del_page_div > *:not(.confim_delete)').css("filter", "none");
@@ -58,6 +60,7 @@ $students = $collection->getAlldocumentsOrdered("id");
                 $('input[name="studentsUID[]"]:checked').each(function() {
                     selectedStudents.push($(this).val());
                 });
+
                 $.ajax({
                     type: "POST",
                     data: {
@@ -65,6 +68,8 @@ $students = $collection->getAlldocumentsOrdered("id");
                     },
                     url: "deleteScript.php",
                     success: function(msg) {
+                        $(".check").prop('disabled', false); // Enable checkboxes
+                        $(".progress").hide();
                         selectedStudents.forEach(function(studentRow) {
                             $("#" + studentRow).remove();
                         });
@@ -81,6 +86,7 @@ $students = $collection->getAlldocumentsOrdered("id");
     </script>
     <script>
         $(document).ready(function() {
+
             let timer;
             $('#searchInput').keyup(function() {
 
@@ -108,7 +114,35 @@ $students = $collection->getAlldocumentsOrdered("id");
             });
         });
     </script>
+    <script>
+        // // Enable delete button if at least one checkbox is checked
+        // const checkboxes = document.querySelectorAll('.check');
+        // const deleteButton = document.getElementById('deleteButton');
 
+        // checkboxes.forEach(checkbox => {
+        //     checkbox.addEventListener('change', function() {
+        //         let atLeastOneChecked = false;
+        //         checkboxes.forEach(cb => {
+        //             if (cb.checked) {
+        //                 atLeastOneChecked = true;
+        //             }
+        //         });
+        //         deleteButton.disabled = !atLeastOneChecked;
+        //     });
+        // });
+        $(document).ready(function() {
+            // Enable delete button if at least one checkbox is checked
+            $(document).on('change', '.check', function() {
+                let atLeastOneChecked = false;
+                $('.check').each(function() {
+                    if ($(this).prop('checked')) {
+                        atLeastOneChecked = true;
+                    }
+                });
+                $('#deleteButton').prop('disabled', !atLeastOneChecked);
+            });
+        });
+    </script>
 
     <link rel="stylesheet" type="text/css" href="shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -150,6 +184,12 @@ $students = $collection->getAlldocumentsOrdered("id");
                         <h3 id="con_text">تم حذف 4 طالبات بنجاح</h3>
                     </div>
                     <div class="searchDiv"><input type="text" id="searchInput" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
+                    <div class="progress">
+                        <div class="progress__ring" role="progressbar" aria-describedby="progress__message" tabindex="0"></div>
+
+                        <div class="progress__message" id="progress__message">..جاري الحذف</div>
+                    </div>
+
 
                     <table>
                         <thead>
@@ -217,22 +257,3 @@ $students = $collection->getAlldocumentsOrdered("id");
 </body>
 
 </html>
-
-
-<script>
-    // Enable delete button if at least one checkbox is checked
-    const checkboxes = document.querySelectorAll('.check');
-    const deleteButton = document.getElementById('deleteButton');
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            let atLeastOneChecked = false;
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    atLeastOneChecked = true;
-                }
-            });
-            deleteButton.disabled = !atLeastOneChecked;
-        });
-    });
-</script>
