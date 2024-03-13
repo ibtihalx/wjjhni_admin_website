@@ -35,9 +35,10 @@ if (isset($_POST['advisors'])) {
        
         $f->deleteDocumentsByFieldValue("uid", $advisorID);
         $auth->deleteUser($advisorID);
-       $advisor_students= $f2->getDocumentsByFieldValue("AdvisorUID", $advisorID);
+       $advisor_students= $f2->getDocumentsRefrenceByFieldValue("AdvisorUID", $advisorID);
        foreach($advisor_students as $student ){
-$student['AdvisorUID']="";
+$student->update([['path' => 'AdvisorUID', 'value' => '']]);
+
        }
         $count = $count + 1;
     }

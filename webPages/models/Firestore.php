@@ -212,4 +212,23 @@ get all data or some key
 
         return $results;
     }
+
+    public function getDocumentsRefrenceByFieldValue(string $fieldName, $fieldValue): array
+    {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        $collection = $this->firestore->collection($this->collectionName);
+
+        // Query documents where the specified field matches the given value
+        $query = $collection->where($fieldName, '=', $fieldValue);
+        $references = [];
+
+        foreach ($query->documents() as $document) {
+            $references[] = $document->reference();
+        }
+
+        return $references;
+    }
 }
