@@ -28,17 +28,62 @@ if (!isset($_SESSION['logged_in'])) {
     </script>
     <script>
         $(document).ready(function() {
-            // $.ajax(
-            //     url: 'checkActive.php' // Server-side script to handle search
-            //     method: 'POST',
-               
-            //     success: function(response) {
-                   
-            //             $('#dataBody').html(response);
-            //         },
 
-                
-            // );
+
+
+
+
+            function checkStatus() {
+                var status = 1;
+                $.ajax({
+                    url: 'checkActive.php',
+                    type: 'POST',
+                    data: {
+                        check: status
+                    },
+                    success: function(response) {
+                        if (response == true) {
+                            $('#btn_active').prop("disabled", true);
+                            $('#btn_notActive').prop("disabled", false);
+                            $("#act_text").html("فترة التقييم مفعلة الآن");
+                        } else {
+                            $('#btn_notActive').prop("disabled", true);
+                            $('#btn_active').prop("disabled", false);
+                            $("#act_text").html("فترة التقييم غير مفعلة الآن");
+                        }
+                    }
+                });
+            }
+            // checkStatus();
+
+            function updateStatus(status) {
+
+                $.ajax({
+                    url: 'checkActive.php',
+                    type: 'POST',
+                    data: {
+                        update: status
+                    },
+                    success: function(response) {
+                        if (response == true) {
+                            $('#btn_active').prop("disabled", true);
+                            $('#btn_notActive').prop("disabled", false);
+                            $("#act_text").html("فترة التقييم مفعلة الآن");
+                        } else {
+                            $('#btn_notActive').prop("disabled", true);
+                            $('#btn_active').prop("disabled", false);
+                            $("#act_text").html("فترة التقييم غير مفعلة الآن");
+                        }
+                    }
+                });
+            }
+
+            $("#btn_active").click(function() {
+                updateStatus(true);
+            });
+            $("#btn_notActive").click(function() {
+                updateStatus(false);
+            });
 
 
         });
@@ -70,7 +115,7 @@ if (!isset($_SESSION['logged_in'])) {
                 <button id="btn_active">تفعيل فترة التقييم</button>&nbsp; &nbsp;&nbsp;&nbsp;
                 <button id="btn_notActive">إلغاء تفعيل فترة التقييم</button>
                 <br><br>
-                <h3>فترة التقييم مفعلة الآن</h3>
+                <h3 id="act_text">فترة التقييم مفعلة الآن</h3>
             </div>
 
             <div class="continer">

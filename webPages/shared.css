@@ -672,6 +672,12 @@ font-weight: bolder;
     font-weight: bolder;
     cursor: pointer;
 }
+#btn_notActive:disabled, #btn_active:disabled{
+    background-color: rgba(128, 128, 128);
+        pointer-events: none;
+        border-color: rgba(128, 128, 128);
+
+}
 
 /* delete students */
 .delete_hint {
