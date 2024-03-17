@@ -3,6 +3,22 @@ $_SESSION['page'] = 'ratingView.php';
 if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
+        require '../vendor/autoload.php';
+
+        use webPages\models\Firestore;
+        // create object of firestore 
+        $f = new Firestore();
+        $collection = $f->setCollectionName('academic_advisors');
+        //retrive all advisors documents
+        $advisors = $collection->getAlldocumentsOrdered("department");
+       $db_rating= new Firestore();
+$collection2 = $db_rating->setCollectionName('ratings');
+
+// $rates=$db_rating->getAdvisorRatingsDataByDocumentId("Rcsju1juO7TyPENB3cClsHTiNzW2");
+        // print_r(count($rates));
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +107,7 @@ if (!isset($_SESSION['logged_in'])) {
 
     <link rel="stylesheet" type="text/css" href="shared.css">
 
-    <title> المواعيد المهمة</title>
+    <title> تقييم المرشدات</title>
 </head>
 
 
@@ -123,34 +139,37 @@ if (!isset($_SESSION['logged_in'])) {
                 <table>
                     <tr>
                         <th>اسم المرشدة</th>
-                        <th>التقييم</th>
                         <th>عدد المقيمات</th>
-                        <th>تاريخ آخر تقييم</th>
+                        <th>تقييم الدعم والتوجيه</th>
+                        <th> تقييم الإلمام بالأنظمة ولوائح الجامعة</th>
+                        <th> تقييم التواجد وسرعة الرد</th>
                         <th>ملاحظات الطالبات</th>
                     </tr>
-                    <tr>
-                        <td>سارة أحمد ناصر</td>
+                   
+                 <?php 
+                 foreach($advisors as $adv){
+                        $rates = $db_rating->getAdvisorRatingsDataByDocumentId($adv['uid']);
+                   if(empty($rates)){
+                            echo " <tr> <td>" . $adv['name'] . "</td>";
+                            echo "<td>0</td><td>-</td><td>-</td><td>-</td>";
+                            echo "<td> لايوجد"."</td>";
+                            echo"</tr>";
+                          
+                   }
+else {
+                            echo " <tr> <td>" . $adv['name'] . "</td>";
+                            echo "<td>".count($rates)."</td>";
+                            echo "<td></td><td></td><td></td>";
+                            echo " <td><button class='view_notes_btn' disabled>عرض الملاحظات </button></td>";
+                            echo"</tr>";
+}
 
-                        <td> <span>4/5</span><br><span class="empty_star">&starf;</span><span class="full_star">&starf;&starf;&starf;&starf;</span>
-                        </td>
-                        <td>21 تقييم</td>
-                        <td>2024-8-12</td>
 
-                        <td><button class="view_notes_btn">عرض الملاحظات </button></td>
 
-                    </tr>
-                    <tr>
-                        <td>سارة محمد علي</td>
+                      
 
-                        <td> <span>5/5</span><br><span class="full_star">&starf;&starf;&starf;&starf;&starf;</span>
-                        </td>
-                        <td>10 تقييم</td>
-                        <td>2024-2-13</td>
-
-                        <td><button class="view_notes_btn">عرض الملاحظات </button></td>
-
-                    </tr>
-
+                 }
+                 ?>
 
                 </table>
                 <div class="students_notes">

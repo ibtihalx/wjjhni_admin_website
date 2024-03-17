@@ -123,6 +123,21 @@ get all data or some key
 
         return !$snapshot->isEmpty();
     }
+    public function checkDocumentExistsByDocumentId(string $documentId): bool
+    {
+        if (empty($this->collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        $documentRef = $this->firestore->document($this->collectionName . '/' . $documentId);
+
+        try {
+            $snapshot = $documentRef->snapshot();
+            return $snapshot->exists();
+        } catch (\Google\ApiCore\ApiException $e) {
+            return false;
+        }
+    }
 
 
     public function getAlldocumentsOrdered(String $field): array
@@ -230,5 +245,65 @@ get all data or some key
         }
 
         return $references;
+    }
+
+
+    public function getAdvisorRatingsData(string $collectionName)
+    {
+        if (empty($collectionName)) {
+            die("Provide collection name, it is required.\r\nTo do so, use setCollectionName(name) function");
+        }
+
+        try {
+            $ratingsRef = $this->firestore->collection($collectionName);
+            $advisorRatingsData = [];
+
+            // Iterate through each document in the "ratings" collection
+            $snapshot = $ratingsRef->documents();
+            foreach ($snapshot as $ratingDoc) {
+                $ratingDocId = $ratingDoc->id();
+                print($ratingDocId);
+                $advisorRatingsRef = $ratingsRef->document($ratingDocId)->collection('advisor_ratings');
+
+                // Iterate through each document in the "advisor_ratings" subcollection
+                $advisorRatingsSnapshot = $advisorRatingsRef->documents();
+                foreach ($advisorRatingsSnapshot as $advisorRatingDoc) {
+                    // Assuming you want to retrieve the data of each document in "advisor_ratings"
+                    $advisorRatingsData[] = $advisorRatingDoc->data();
+                }
+            }
+
+            return $advisorRatingsData;
+        } catch (\Google\ApiCore\ApiException $e) {
+            // Handle the exception
+            return [];
+        }
+    }
+
+    public function getAdvisorRatingsDataByDocumentId(string $documentId)
+    {
+        if (empty($documentId)) {
+            die("Provide document ID, it is required.");
+        }
+
+        try {
+            $ratingsRef = $this->firestore->collection('ratings')->document($documentId);
+            $advisorRatingsData = [];
+
+            // Access the "advisor_ratings" subcollection of the specified document
+            $advisorRatingsRef = $ratingsRef->collection('advisor_ratings');
+
+            // Retrieve documents from the "advisor_ratings" subcollection
+            $advisorRatingsSnapshot = $advisorRatingsRef->documents();
+            foreach ($advisorRatingsSnapshot as $advisorRatingDoc) {
+                // Assuming you want to retrieve the data of each document in "advisor_ratings"
+                $advisorRatingsData[] = $advisorRatingDoc->data();
+            }
+
+            return $advisorRatingsData;
+        } catch (\Google\ApiCore\ApiException $e) {
+            // Handle the exception
+            return [];
+        }
     }
 }
