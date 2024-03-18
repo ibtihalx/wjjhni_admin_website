@@ -193,15 +193,16 @@ function printStars($rating)
                             $rules_know = $rules_know / $numberOfRatings;
 
                             echo "<td>";
-                            echo "<span>$support_direct_rate/5</span><br>";
+                            echo "<span>". number_format( (float)$support_direct_rate, 2, '.', '')."/5</span><br>";
                             printStars($support_direct_rate);
                             echo "</td>";
                             echo "<td>";
-                            echo "<span>$attent_fast_resp/5</span><br>";
+                            echo "<span>"
+                            . number_format((float)$attent_fast_resp, 2, '.', '')."/5</span><br>";
                             printStars($attent_fast_resp);
                             echo "</td>";
                             echo "<td>";
-                            echo "<span>$rules_know/5</span><br>";
+                            echo "<span>" . number_format((float)$rules_know, 2, '.', '') . "/5</span><br>";
                             printStars($rules_know);
                             echo "</td>";
 
