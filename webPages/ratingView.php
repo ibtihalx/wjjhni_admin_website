@@ -23,6 +23,11 @@ $db_rate_check->setDocumentName("activationDocument");
 $doc = $db_rate_check->getData();
 $isActive = $doc['isActive'];
 
+// $notes = array();
+
+// $notes = array_fill_keys($notes, $one_adv);
+// print_r($notes);
+
 
 
 // $rates=$db_rating->getAdvisorRatingsDataByDocumentId("Rcsju1juO7TyPENB3cClsHTiNzW2");
@@ -72,6 +77,29 @@ function printStars($rating)
 
             });
             $(".view_notes_btn").click(function() {
+
+                var notes = JSON.parse($(this).val());
+                var adv_name = Object.keys(notes)[0]; // Extract the key
+                $('#name_adv').text(adv_name);
+                // Clear the contents of the .students_notes container
+                $('.stu_note').empty();
+                
+
+                // Iterate over each key-value pair in the JSON object
+                Object.entries(notes[adv_name]).forEach(([key, value]) => {
+                    // Create a new <div> element for each key-value pair
+                    $('<br>').appendTo('.students_notes');
+                    var divElement = $('<div>').addClass('stu_note');
+
+                    // Create and append <p> elements for the date and note content
+                    var dateElement = $('<p>').text(value + ' :التاريخ ').appendTo(divElement);
+                    $('<br>').appendTo(divElement);
+                    var noteElement = $('<p>').text(key).appendTo(divElement);
+
+                    // Append the new <div> element to the ".students_notes" container
+                    $('.students_notes').append(divElement);
+                });
+
                 $(".students_notes").show();
             });
 
@@ -82,14 +110,14 @@ function printStars($rating)
             function updateStatus(status) {
 
                 $.ajax({
-                        url: 'checkActive.php',
-                        type: 'POST',
-                        data: {
-                            update: status
-                        },
-                        success: function(response) {
-                            response = response.trim().toLowerCase();
-                            if (response === "true") {
+                    url: 'checkActive.php',
+                    type: 'POST',
+                    data: {
+                        update: status
+                    },
+                    success: function(response) {
+                        response = response.trim().toLowerCase();
+                        if (response === "true") {
                             $('#btn_active').prop("disabled", true);
                             $('#btn_notActive').prop("disabled", false);
                             $("#act_text").html("فترة التقييم مفعلة الآن");
@@ -100,13 +128,14 @@ function printStars($rating)
                         }
                     }
                 });
-        }
+            }
 
-        $("#btn_active").click(function() {
-            updateStatus("true");
-        }); $("#btn_notActive").click(function() {
-            updateStatus("false");
-        });
+            $("#btn_active").click(function() {
+                updateStatus("true");
+            });
+            $("#btn_notActive").click(function() {
+                updateStatus("false");
+            });
 
 
         });
@@ -179,13 +208,20 @@ function printStars($rating)
                             echo "<td> لايوجد" . "</td>";
                             echo "</tr>";
                         } else {
+
                             $numberOfRatings = count($rates);
                             echo " <tr> <td>" . $adv['name'] . "</td>";
                             echo "<td>" . $numberOfRatings . "</td>";
+                            $notes = array();
+                            $comments = array();
                             foreach ($rates as $rate) {
                                 $support_direct_rate += $rate['support_direct_rate'];
                                 $attent_fast_resp += $rate['attent_fast_resp'];
                                 $rules_know += $rate['rules_know'];
+                                if ($rate['studentComment'] != "") {
+                                    $comments[$rate['studentComment']] = $rate['addedDate'];
+                                }
+                                $notes = array($adv['name'] => $comments);
                             }
                             // Calculate average ratings
                             $support_direct_rate = $support_direct_rate / $numberOfRatings;
@@ -193,12 +229,12 @@ function printStars($rating)
                             $rules_know = $rules_know / $numberOfRatings;
 
                             echo "<td>";
-                            echo "<span>". number_format( (float)$support_direct_rate, 2, '.', '')."/5</span><br>";
+                            echo "<span>" . number_format((float)$support_direct_rate, 2, '.', '') . "/5</span><br>";
                             printStars($support_direct_rate);
                             echo "</td>";
                             echo "<td>";
                             echo "<span>"
-                            . number_format((float)$attent_fast_resp, 2, '.', '')."/5</span><br>";
+                                . number_format((float)$attent_fast_resp, 2, '.', '') . "/5</span><br>";
                             printStars($attent_fast_resp);
                             echo "</td>";
                             echo "<td>";
@@ -206,7 +242,8 @@ function printStars($rating)
                             printStars($rules_know);
                             echo "</td>";
 
-                            echo "<td><button class='view_notes_btn'>عرض الملاحظات</button></td>";
+                            echo "<td><button class='view_notes_btn' value='" . htmlspecialchars(json_encode($notes), ENT_QUOTES, 'UTF-8') . "'>" .
+                                "عرض الملاحظات</button></td>";
                             echo "</tr>";
                         }
                     }
@@ -216,9 +253,9 @@ function printStars($rating)
                 <div class="students_notes">
                     <button id="closing_btn" onclick="close()">&#10006;</button>
                     <h3>ملاحظات عن المرشدة</h3>
-                    <h4>سارة أحمد ناصر</h4>
+                    <h4 id="name_adv">سارة أحمد ناصر</h4>
                     <br>
-                    <div class="stu_note">
+                    <!-- <div class="stu_note">
                         <p>التاريخ:
                             2024-8-12
                         </p>
@@ -247,7 +284,7 @@ function printStars($rating)
                             مشرفة ممتازة وتضع حلول للخطط
                         </p>
                     </div>
-                    <br>
+                    <br> -->
 
                 </div>
 
