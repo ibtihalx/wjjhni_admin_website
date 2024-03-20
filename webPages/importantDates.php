@@ -19,23 +19,37 @@ $firestore = new FirestoreClient([
 
 $f = new Firestore();
 $collection2 = $f->setCollectionName('ImportantDate');
+
+
 //retrive all advisors documents
 $Date = $collection2->getAllDocuments();
 
 $added=0;
-                        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['title'])) {
+                            $title2 = $_POST['title'];
                             // Retrieve the selected date
                             $selectedDate = isset($_POST["selectedDate"]) ? $_POST["selectedDate"] : '';
                             $title = isset($_POST["title"]) ? $_POST["title"] : '';
 
                             $data = [
                                 'Date' => "$selectedDate",
-                                'title' => "$title",
+                                'title' => "$title2",
                             ];
+
                             $collection = $firestore->collection('ImportantDate');
-                            $newDocument = $collection->add($data);
+                            $collection3 = $firestore->collection('ImportantDate')
+                            ->where('title', '=', $data['title'])
+                            ->limit(1);
+                            $snapshot = $collection3->documents();
+                            foreach ($snapshot as $document) {
+                                $documentId = $document->id();
+
+                                $docRef = $firestore->collection('ImportantDate')->document($documentId);
+                                $docRef->set($data, ['merge' => true]);
+                            }
                             $added=1;
 
+                            
                             $Date = $collection2->getAllDocuments();
 
                         }
@@ -73,44 +87,10 @@ $added=0;
 
             <div class="continer">
 
-            <div class="testing">
-            <div>
-                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                    <label style="font-size:large;" for="selectedDate">:التاريخ</label>
-                    <input type="date" id="selectedDate" name="selectedDate" lang="ar" required>
-                    <br><br>
-                    
-                    <label style="font-size:large;"for="title">:العنوان</label>
-                    <div class="Title"><input type="text" id="title" name="title" required dir="rtl" placeholder="العنوان"></div>
-                    <br><br>
-
-
-                    <div class="buttonContainer">
-                        <button type="submit" class="button-1">إضافة</button>
-                    </div>
-                    <br>
-                    <div class="buttonContainer">
-                    <div class="success-message" id="show1">
-                        <span class="success-text" id="successmessage">
-                        </span>
-                    </div>
-                    </div>
-                    <br>
-                    
-                    
                 
-
-                </form>
+                                <div class="forms">
 
                 
-                            
-                            </div>
-                                
-
-                    
-                            
-                
-                                <div>
                                 <table>
                     <tr>
                         <th style="width:350px;">
@@ -119,25 +99,49 @@ $added=0;
                         <th style="width:200px;">
                             التاريخ
                         </th>
+                        <th style="width:200px;">
+                            اختيار
+                        </th>
+                        <th style="width:150px;">
+                            إضافة
+                        </th>
                     </tr>
 
                     <!-- retrive from DB all Date info -->
-                    <?php foreach ($Date as $date) : ?>
+                    <?php 
+
+                    foreach ($Date as $date) : ?>
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <tr>
                 <td><?= $date['title'] ?></td>
+                <input type="hidden" name="title" value="<?= $date['title'] ?>">
                 <td><?= $date['Date'] ?></td>
+                <td><input type="date" id="selectedDate" name="selectedDate" lang="ar" required></td>
+                <td><div class="buttonContainer">
+                        <button type="submit" class="button-1">إضافة</button>
+                    </div>
+                </td>
             </tr>
+
+            
+            </form>
+            
         <?php endforeach; ?>
 
                 </table>
-                </div>
-                </div>
-
-
-            </div>
-
                 
 
+                
+                <br><br>
+                <div class="success-message" id="show1">
+                    <span class="success-text" id="successmessage">
+                    </span>
+                </div>
+
+                    </div>
+
+            </div>
+            
 
         </div>
 

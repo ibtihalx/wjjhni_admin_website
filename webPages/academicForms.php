@@ -4,6 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 use Google\Cloud\Firestore\FirestoreClient;
+use Google\Cloud\Storage\StorageClient;
 require '../vendor/autoload.php';
 include '../dbcon.php';
 putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
@@ -11,6 +12,12 @@ $projectId = 'wjjhni';
 $databaseId = '(default)';
 use webPages\models\Firestore;
 $f = new Firestore();
+
+$client = new FirestoreClient([
+    'projectId' => $projectId,
+]);
+
+
 ?>
 
 
@@ -187,7 +194,9 @@ button {
 
                     const app = firebase.initializeApp(firebaseConfig);
 
-                    const storage = firebase.storage();
+                    var storage = firebase.storage();
+
+                    
 
                     const inp = document.querySelector(".inp");
                     const fileData = document.querySelector(".filedata");
@@ -218,41 +227,32 @@ button {
                         console.log(file, fileName);
                     };
 
+                    var URL="";
+                    
+                    
                     const uploadImage = () => {
                         loading.style.display = "block";
                         const storageRef = storage.ref().child("MyForms");
-                        const folderRef = storageRef.child(fileName);
-                        const uploadtask = folderRef.put(file);
+                        const fileRef = storageRef.child(fileName);
+                        const uploadtask = fileRef.put(file);
                         uploadtask.on(
                         "state_changed",
-                        (error) => {
-                            console.log(error);
-                            document.getElementById("successmessage").innerText = "تم إرفاق النموذج بنجاح";
+                        (snapshot) => {
+                            const prog = Math.round(
+                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            );
+                            loading.innerHTML = prog + "%";
                         },
-                        () => {
-                            storage
-                            .ref("MyForms")
-                            .child(uploadedFileName)
-                            .getDownloadURL()
-                            .then((url) => {
-                                console.log("URL", url);
-                                if (!url) {
-                                img.style.display = "none";
-                                } else {
-                                img.style.display = "block";
-                                loading.style.display = "none";
-                                }
-                                img.setAttribute("src", url);
-                            });
-                            console.log("File Uploaded Successfully");
-                            
-                            
+                        async (error) => {
+                        console.log(error);
+                        const downloadURL = await fileRef.getDownloadURL();
+                        console.log(downloadURL);
+                        document.getElementById("successmessage").innerText = "تم إرفاق النموذج بنجاح";
                         }
                         );
-
-                        
                     };
 
+                        
                     
 
                 
