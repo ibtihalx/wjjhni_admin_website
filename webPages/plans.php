@@ -5,13 +5,22 @@ if (!isset($_SESSION['logged_in'])) {
 }
 
 use Google\Cloud\Firestore\FirestoreClient;
+use Google\Cloud\Storage\StorageClient;
+
 require '../vendor/autoload.php';
 include '../dbcon.php';
 putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
 $projectId = 'wjjhni';
 $databaseId = '(default)';
+
 use webPages\models\Firestore;
+
 $f = new Firestore();
+
+$client = new FirestoreClient([
+    'projectId' => $projectId,
+]);
+
 ?>
 
 <!DOCTYPE html>
@@ -22,90 +31,88 @@ $f = new Firestore();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
-    <link rel="stylesheet" type="text/css" href="shared.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.0/firebase-firestore.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="shared.css">
     <style>
         .inp {
-  display: none;
-}
+        display: none;
+        }
 
-.progressBar {
-  width: 250px;
-  background: rgb(196, 193, 193);
-  padding: 15px 20px;
-  position: relative;
-}
+        .progressBar {
+        width: 250px;
+        background: rgb(196, 193, 193);
+        padding: 15px 20px;
+        position: relative;
+        }
 
-.progress {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(75deg, rgb(11, 65, 173), rgb(179, 10, 165));
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
+        .progress {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(75deg, rgb(11, 65, 173), rgb(179, 10, 165));
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        }
 
-.selectImage {
-    font-weight: bold;
-    font-size: 14px;
-    background: #375E98;
-    color: white;
-    padding: 9px 12px;
-    border-radius: 10px;
-}
+        .selectImage {
+            font-weight: bold;
+            font-size: 14px;
+            background: #375E98;
+            color: white;
+            padding: 9px 12px;
+            border-radius: 10px;
+        }
 
-.selectImage:hover {
-    background-color: #8da5c8;
-  }
+        .selectImage:hover {
+            background-color: #8da5c8;
+        }
 
-.upload {
-    font-weight: bold;
-    font-size: 14px;
-    background: green;
-    color: white;
-    padding: 9px 12px;
-    border-radius: 10px;
-}
+        .upload {
+            font-weight: bold;
+            font-size: 14px;
+            background: green;
+            color: white;
+            padding: 9px 12px;
+            border-radius: 10px;
+        }
 
-.upload:hover {
-    background-color:#66B266 ;
-}
+        .upload:hover {
+            background-color:#66B266 ;
+        }
 
-button {
-  cursor: pointer;
-  border: none;
-  margin: 10px 0;
-}
+        button {
+        cursor: pointer;
+        border: none;
+        margin: 10px 0;
+        }
 
-.filedata {
-  background: cadetblue;
-  padding: 10px 15px;
-  font-size: 14px;
-  max-width: 200px;
-  text-overflow: ellipsis;
-  border-radius: 10px;
-  display: none;
-  overflow: hidden;
-  margin: 10px 0;
-}
+        .filedata {
+        background: cadetblue;
+        padding: 10px 15px;
+        font-size: 14px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        border-radius: 10px;
+        display: none;
+        overflow: hidden;
+        margin: 10px 0;
+        }
 
 
 
-.loading {
-  display: none;
-}
-
+        .loading {
+        display: none;
+        }
     </style>
-
 
     <title>الخطط الدراسية</title>
 </head>
-
 
 <body>
     <header>
@@ -145,10 +152,11 @@ button {
                     <br><span class="filedata"></span>
                     <div id="buttonss">
                         <div>
-                            <input type="file" class="inp" onchange="getImageData(event)" /><button onclick="selectImage()" class="selectImage">اختيار ملف</button>
+                            <input type="file" class="inp" id="getImageDataInput" />
+                            <button id="selectImageBtn" class="selectImage">اختيار ملف</button>
                         </div>
                         <div>
-                            <button onclick="uploadImage()" class="upload">+    إرفاق</button>
+                            <button id="uploadDocumentBtn" class="upload">+    إرفاق</button>
                         </div>
                     </div>
 
@@ -160,94 +168,11 @@ button {
                     </div> 
 
                    
-            </div>
-        
-                    
-        <script>
-                const firebaseConfig = {
-                    apiKey: "AIzaSyDI6ldQx14IuT_wEDt6Er076im2ukfeRzQ",
-                    authDomain: "wjjhni.firebaseapp.com",
-                    databaseURL: "https://wjjhni-default-rtdb.firebaseio.com",
-                    projectId: "wjjhni",
-                    storageBucket: "wjjhni.appspot.com",
-                    messagingSenderId: "919936662501",
-                    appId: "1:919936662501:web:cc53bfe12ad5580f33cd0c",
-                    measurementId: "G-DNYPTYJ55N"
-                };
+    </div>
 
-                    const app = firebase.initializeApp(firebaseConfig);
 
-                    const storage = firebase.storage();
-
-                    const inp = document.querySelector(".inp");
-                    const fileData = document.querySelector(".filedata");
-                    const loading = document.querySelector(".loading");
-                    let file;
-                    let fileName;
-                    let isLoading = false;
-                    let uploadedFileName;
-                    const selectImage = () => {
-                        inp.click();
-                    };
-
-                    var selectedOption="";
-                    function getSelectedOption() {
-                        selectedOption = document.getElementById("options").value;
-                    }
-
-                    const getImageData = (e) => {
-                        file = e.target.files[0];
-                        var stringWithUnderscores = selectedOption.replace(/ /g, "_");
-                        fileName = stringWithUnderscores;
-                        
-                        if (fileName) {
-                        fileData.style.display = "block";
-                        }
-                        fileData.innerHTML = file.name+"   تم اختيار ";
-                        
-                        console.log(file, fileName);
-                    };
-
-                    const uploadImage = () => {
-                        loading.style.display = "block";
-                        const storageRef = storage.ref().child("plans");
-                        const folderRef = storageRef.child(fileName);
-                        const uploadtask = folderRef.put(file);
-                        uploadtask.on(
-                        "state_changed",
-                        (error) => {
-                            console.log(error);
-                            document.getElementById("successmessage").innerText = "تم إرفاق النموذج بنجاح";
-                        },
-                        () => {
-                            storage
-                            .ref("plans")
-                            .child(uploadedFileName)
-                            .getDownloadURL()
-                            .then((url) => {
-                                console.log("URL", url);
-                                if (!url) {
-                                img.style.display = "none";
-                                } else {
-                                img.style.display = "block";
-                                loading.style.display = "none";
-                                }
-                                img.setAttribute("src", url);
-                            });
-                            console.log("File Uploaded Successfully");
-                            
-                            
-                        }
-                        );
-
-                        
-                    };
-
-                    
-
-                
-                    
-            </script>
+                <script type="module" src="./assets/js/firebase2.js"></script>
+                <script type="module" src="./assets/js/custom2.js"></script>
             </div>
         </div>
 
