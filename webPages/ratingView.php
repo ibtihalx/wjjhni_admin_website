@@ -76,21 +76,28 @@ function printStars($rating)
                 $(".students_notes").hide();
 
             });
+            // Event delegation for closing button
+            $(document).on("click", "#closing_btn", function() {
+                $(".students_notes").hide();
+            });
             $(".view_notes_btn").click(function() {
 
                 var notes = JSON.parse($(this).val());
                 var adv_name = Object.keys(notes)[0]; // Extract the key
                 $('#name_adv').text(adv_name);
                 // Clear the contents of the .students_notes container
-                $('.stu_note').empty();
-                
+                $('.students_notes').empty();
+
+                $('<button id="closing_btn">&#10006;</button>').appendTo(".students_notes");
+                $('<h3> ملاحظات عن المرشدة </h3>').appendTo('.students_notes');
+                $('<h4 id="name_adv">' + adv_name + '</h4>').appendTo('.students_notes ');
 
                 // Iterate over each key-value pair in the JSON object
                 Object.entries(notes[adv_name]).forEach(([key, value]) => {
                     // Create a new <div> element for each key-value pair
-                    $('<br>').appendTo('.students_notes');
+                    // $('<br>').appendTo('.students_notes');
                     var divElement = $('<div>').addClass('stu_note');
-
+                    $('<br>').appendTo('.students_notes');
                     // Create and append <p> elements for the date and note content
                     var dateElement = $('<p>').text(value + ' :التاريخ ').appendTo(divElement);
                     $('<br>').appendTo(divElement);

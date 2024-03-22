@@ -68,7 +68,7 @@ if (!isset($_SESSION['logged_in'])) {
 
                     <h2> الخطط الدراسية</h2>
                     <br>
-                    <button class="btn_card" onclick="location.href= 'plans.php'">تعديل </button><br>
+                    <button class="btn_card" onclick="location.href= 'plans.php'">عرض </button><br>
 
                 </div>
 
@@ -86,8 +86,8 @@ if (!isset($_SESSION['logged_in'])) {
 
                     <h2> المواعيد المهمة</h2>
                     <br>
-                    <button class="btn_card" onclick="location.href= 'importantDates.php'">أضف </button><br>
-                    <button class="btn_card" onclick="location.href= 'importantDates.php'">حذف </button><br>
+                    <button class="btn_card" onclick="location.href= 'importantDates.php'">عرض </button><br>
+                   
                 </div>
 
 
@@ -106,7 +106,7 @@ if (!isset($_SESSION['logged_in'])) {
 
                     <h2>النماذج الأكاديمية</h2>
                     <br>
-                    <button class="btn_card" onclick="location.href= 'academicForms.php'">تعديل</button><br>
+                    <button class="btn_card" onclick="location.href= 'academicForms.php'">عرض</button><br>
                    
                 </div>
                 <div class="box">
