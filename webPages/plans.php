@@ -4,6 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 
+use Carbon\Carbon;
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Cloud\Storage\StorageClient;
 
@@ -21,6 +22,8 @@ $client = new FirestoreClient([
     'projectId' => $projectId,
 ]);
 
+$collectionRef = $client->collection("plans");
+$documents = $collectionRef->documents();
 ?>
 
 <!DOCTYPE html>
@@ -141,12 +144,14 @@ $client = new FirestoreClient([
             <br>
             <select id="options" class="dropdown" name="selectedOption" onchange="getSelectedOption()">
                 <option disabled selected>اختيار تخصص</option>
+                <option>تقنية المعلومات مسار عام</option>
                 <option>تقنية المعلومات مسار أمن سيبراني</option>
                 <option>تقنية المعلومات مسار علم البيانات والذكاء الاصطناعي</option>
                 <option>تقنية المعلومات مسار الشبكات وهندسة إنترنت الأشياء</option>
                 <option>نظم المعلومات</option>
                 <option>هندسة البرمجيات</option>
                 <option>علوم الحاسب</option>
+                
             </select>
             <br>
                     <br><span class="filedata"></span>
@@ -166,6 +171,9 @@ $client = new FirestoreClient([
                         <span class="success-text" id="successmessage">
                         </span>
                     </div> 
+
+                    <br>
+                    
 
                    
     </div>

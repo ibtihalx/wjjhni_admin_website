@@ -6,6 +6,9 @@ import {
   addDoc,
   doc,
   updateDoc,
+  deleteDoc, 
+  query, 
+  where,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDI6ldQx14IuT_wEDt6Er076im2ukfeRzQ",
@@ -18,27 +21,53 @@ const firebaseConfig = {
   measurementId: "G-DNYPTYJ55N",
 };
 
+
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 
-// export const getAcademicForms = () => {
-//     // for get docs and all data in collection
-//     return getDocs(collection(db, "academic_forms")); // from firestore
-//   };
+export const deletePreviousDocument = async (name) => {
+  const q = query(collection(db, "academic_forms"), where("name", "==", name));
+  const querySnapshot = await getDocs(q);
 
-// for read all data of collection (academic_forms)
-//   window.addEventListener("DOMContentLoaded", async (e) => {
-//     const querySnapshot = await getAcademicForms(); // return array
-//     querySnapshot.forEach((doc) => {
-//         console.log(doc.data()); // for get data line by line doc
-//     });
-// });
+  
+  querySnapshot.forEach((doc) => {
+    deleteDoc(doc.ref);
+    console.log("Document deleted with ID: ", doc.id);
+  });
+};
+
+
+const updateTable = async () => {
+  const documents = await getDocs(collection(db, "academic_forms"));
+
+  const tableBody = document.querySelector("#forms-table tbody");
+  tableBody.innerHTML = "";
+
+  documents.forEach((doc) => {
+    const data = doc.data();
+    const createTime = data.createTime;
+    const carbon = moment(createTime).format("YYYY-MM-DD HH:mm:ss");
+
+    const row = `
+      <tr>
+        <td>${data.name}</td>
+        <td>${carbon}</td>
+      </tr>
+    `;
+
+    tableBody.innerHTML += row;
+  });
+};
+
 
 // for add data in collection
 export const uploadDocument = async (file_url, name) => {
+  
   const docRef = await addDoc(collection(db, "academic_forms"), {
     file_url,
     name,
+    createTime: new Date().toISOString(),
   });
   console.log("Document written with ID: ", docRef.id);
 
@@ -48,3 +77,4 @@ export const uploadDocument = async (file_url, name) => {
   console.log("Field 'id' added to the document with ID: ", docRef.id);
 
 };
+

@@ -1,3 +1,4 @@
+
 import { uploadDocument } from "./firebase.js";
 
 const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");

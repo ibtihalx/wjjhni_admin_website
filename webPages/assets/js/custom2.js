@@ -1,4 +1,4 @@
-import { uploadDocument } from "./firebase2.js";
+import { uploadDocument, deletePreviousDocument } from "./firebase2.js";
 
 const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");
 const selectImageBtn = document.getElementById("selectImageBtn");
@@ -61,6 +61,7 @@ getImageDataInput.onchange = getImageData;
 var URL = "";
 
 const uploadImage = () => {
+  deletePreviousDocument(document.getElementById("options").value);
   loading.style.display = "block";
   const storageRef = storage.ref().child("plans");
   const fileRef = storageRef.child(fileName);

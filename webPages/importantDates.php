@@ -92,20 +92,7 @@ $added=0;
 
                 
                                 <table>
-                    <tr>
-                        <th style="width:350px;">
-                            العنوان
-                        </th>
-                        <th style="width:200px;">
-                            التاريخ
-                        </th>
-                        <th style="width:200px;">
-                            اختيار
-                        </th>
-                        <th style="width:150px;">
-                            إضافة
-                        </th>
-                    </tr>
+                   
 
                     <!-- retrive from DB all Date info -->
                     <?php 
@@ -113,11 +100,11 @@ $added=0;
                     foreach ($Date as $date) : ?>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <tr>
-                <td><?= $date['title'] ?></td>
+                <td style="width:350px;"><?= $date['title'] ?></td>
                 <input type="hidden" name="title" value="<?= $date['title'] ?>">
-                <td><?= $date['Date'] ?></td>
-                <td><input type="date" id="selectedDate" name="selectedDate" lang="ar" required></td>
-                <td><div class="buttonContainer">
+                <td style="width:200px;"><?= $date['Date'] ?></td>
+                <td style="width:200px;"><input type="date" id="selectedDate" name="selectedDate" lang="ar" required></td>
+                <td style="width:150px;"><div class="buttonContainer">
                         <button type="submit" class="button-1">إضافة</button>
                     </div>
                 </td>

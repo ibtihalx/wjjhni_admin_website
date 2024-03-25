@@ -4,6 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: index.php");
 }
 
+use Carbon\Carbon;
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Cloud\Storage\StorageClient;
 
@@ -20,6 +21,9 @@ $f = new Firestore();
 $client = new FirestoreClient([
     'projectId' => $projectId,
 ]);
+
+$collectionRef = $client->collection("academic_forms");
+$documents = $collectionRef->documents();
 
 ?>
 
@@ -179,13 +183,18 @@ $client = new FirestoreClient([
                         </span>
                     </div>
 
+                    <br>
+                    
 
                 </div>
 
                 <script type="module" src="./assets/js/firebase.js"></script>
                 <script type="module" src="./assets/js/custom.js"></script>
 
+                
 
+
+                
 
             </div>
         </div>
