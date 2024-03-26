@@ -168,11 +168,62 @@ $documents = $collectionRef->documents();
                 </div>
                 
                     <div class="success-message" id="show1">
-                        <span class="success-text" id="successmessage">
+                    <span class="success-text" id="successmessage"><?= (isset($_GET['success'])?'تم إرفاق الخطة بنجاح':'') ?>
                         </span>
                     </div> 
 
                     <br>
+
+                    <table>
+                        <label style="font-size: 20px";>:الخطط المُضافة</label>
+                        <br>
+                    <tr>
+                        <th style="width:350px;">اسم التخصص</th>
+                        <th style="width:200px;">تاريخ الإضافة</th>
+                    </tr>
+                    <?php 
+                        foreach ($documents as $document) {
+                            $data = $document->data();
+                            $name1= "هندسة البرمجيات";
+                            
+                            $nestedCollectionRef = $document->reference()->collection("courses");
+                            $nestedDocuments = $nestedCollectionRef->documents();
+                            foreach ($nestedDocuments as $nestedDocument) {
+                                
+                            $createTime = $nestedDocument->createTime();
+                            $carbon = Carbon::parse($createTime);
+                            $carbon->setTimezone('Asia/Riyadh');
+                            
+                            $nestedData = $nestedDocument->data();
+                            if ( $data["name"] === "قسم علوم الحاسب" ){
+                                $name1="علوم الحاسب";
+                            }else if ( $data['name'] === " قسم نظم المعلومات"){
+                                $name1="نظم المعلومات";
+                            } else if ( $data['name'] === "قسم تقنية المعلومات"){
+                                if ( $nestedData['course_name'] === "أمن سيبراني"){
+                                    $name1="تقنية المعلومات(أمن سيبراني)";
+                                } else if ( $nestedData['course_name'] === "مسار عام"){
+                                    $name1="تقنية المعلومات(مسار عام)";
+                                } else if( $nestedData['course_name'] === "شبكات وهندسة انترنت"){
+                                    $name1="تقنية معلومات(شبكات وهندسة إنترنت الأشياء)";
+                                } else {
+                                    $name1="تقنية المعلومات(علم البيانات والذكاء الاصطناعي)";
+                                }
+                            }
+                            ?>
+                            <tr>
+                                <td> <?= $name1 ?></td>
+                                <td> <?= $carbon->format('Y-m-d h:i:s') . PHP_EOL ?> </td>
+                            </tr> 
+                             <?php
+                            }
+                        }
+
+                    ?>
+
+
+
+                </table>
                     
 
                    

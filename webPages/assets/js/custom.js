@@ -1,5 +1,4 @@
-
-import { uploadDocument } from "./firebase.js";
+import { uploadDocument, deletePreviousDocument } from "./firebase.js";
 
 const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");
 const selectImageBtn = document.getElementById("selectImageBtn");
@@ -62,6 +61,7 @@ getImageDataInput.onchange = getImageData;
 var URL = "";
 
 const uploadImage = () => {
+  deletePreviousDocument(document.getElementById("options").value);
   loading.style.display = "block";
   const storageRef = storage.ref().child("MyForms");
   const fileRef = storageRef.child(fileName);
@@ -83,10 +83,13 @@ const uploadImage = () => {
         console.log("File available at", downloadURL);
         uploadDocument(downloadURL, document.getElementById("options").value);
         console.log(downloadURL, "downloadURL");
+        window.location.href = window.location.pathname+"?success=true";
+
       });
     }
   );
-  document.getElementById("successmessage").innerText = "تم إرفاق النموذج بنجاح";
 };
 
 uploadDocumentBtn.onclick = uploadImage;
+
+

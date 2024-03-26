@@ -179,14 +179,45 @@ $documents = $collectionRef->documents();
                     </div>
 
                     <div class="success-message" id="show1">
-                        <span class="success-text" id="successmessage">
+                    <span class="success-text" id="successmessage"><?= (isset($_GET['success'])?'تم إرفاق النموذج بنجاح':'') ?>
                         </span>
                     </div>
-
                     <br>
+
+                    <table>
+                        <label style="font-size: 20px";>:النماذج المُضافة</label>
+                        <br>
+                    <tr>
+                        <th style="width:350px;">اسم النموذج</th>
+                        <th style="width:200px;">تاريخ الإضافة</th>
+                    </tr>
+                    <?php 
+                        foreach ($documents as $document) {
+                            $createTime = $document->createTime();
+                            $carbon = Carbon::parse($createTime);
+                            $carbon->setTimezone('Asia/Riyadh');
+
+                            
+                            $data = $document->data();
+                            ?>
+                            <tr>
+                                <td> <?= $data['name'] ?></td>
+                                <td> <?= $carbon->format('Y-m-d H:i:s') . PHP_EOL ?> </td>
+                            </tr> 
+                             <?php
+                        }
+                    ?>
+
+
+
+                </table>
+
+
+                    </div> 
+
+                    
                     
 
-                </div>
 
                 <script type="module" src="./assets/js/firebase.js"></script>
                 <script type="module" src="./assets/js/custom.js"></script>

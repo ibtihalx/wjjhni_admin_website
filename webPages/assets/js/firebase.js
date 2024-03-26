@@ -36,38 +36,12 @@ export const deletePreviousDocument = async (name) => {
     console.log("Document deleted with ID: ", doc.id);
   });
 };
-
-
-const updateTable = async () => {
-  const documents = await getDocs(collection(db, "academic_forms"));
-
-  const tableBody = document.querySelector("#forms-table tbody");
-  tableBody.innerHTML = "";
-
-  documents.forEach((doc) => {
-    const data = doc.data();
-    const createTime = data.createTime;
-    const carbon = moment(createTime).format("YYYY-MM-DD HH:mm:ss");
-
-    const row = `
-      <tr>
-        <td>${data.name}</td>
-        <td>${carbon}</td>
-      </tr>
-    `;
-
-    tableBody.innerHTML += row;
-  });
-};
-
-
 // for add data in collection
 export const uploadDocument = async (file_url, name) => {
   
   const docRef = await addDoc(collection(db, "academic_forms"), {
     file_url,
     name,
-    createTime: new Date().toISOString(),
   });
   console.log("Document written with ID: ", docRef.id);
 

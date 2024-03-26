@@ -83,10 +83,10 @@ const uploadImage = () => {
         console.log("File available at", downloadURL);
         uploadDocument(downloadURL, document.getElementById("options").value);
         console.log(downloadURL, "downloadURL");
+        window.location.href = window.location.pathname+"?success=true";
       });
     }
   );
-  document.getElementById("successmessage").innerText = "تم إرفاق الخطة بنجاح";
 };
 
 uploadDocumentBtn.onclick = uploadImage;
