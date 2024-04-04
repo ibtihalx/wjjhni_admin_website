@@ -29,11 +29,19 @@ ini_set('display_errors', 1);
             top: 0px;
             right: 0px;
         }
+        #logo {
+            margin-top: 20%;
+            margin-left: 170%;
+            position: absolute;
+        }
+
     </style>
 
 </head>
 
+
 <body>
+    <header><img id="logo" src="images/logo.png" alt="logo"></header>
 
 
     <div class="warper">
@@ -42,7 +50,7 @@ ini_set('display_errors', 1);
 
         <div class="form-box login">
 
-    
+
 
             <h2>تسجيل الدخول</h2>
             <br>
