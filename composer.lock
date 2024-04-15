@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55d80b46f41820fb6c61d2602faa311c",
+    "content-hash": "64961d5ad5cb6f21e465f4cc2f84fc14",
     "packages": [
         {
             "name": "beste/clock",
@@ -376,21 +376,21 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.32.1",
+            "version": "v1.37.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "999e9ce8b9d17914f04e1718271a0a46da4de2f3"
+                "reference": "1a7de77b72e6ac60dccf0e6478c4c1005bb0ff46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/999e9ce8b9d17914f04e1718271a0a46da4de2f3",
-                "reference": "999e9ce8b9d17914f04e1718271a0a46da4de2f3",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/1a7de77b72e6ac60dccf0e6478c4c1005bb0ff46",
+                "reference": "1a7de77b72e6ac60dccf0e6478c4c1005bb0ff46",
                 "shasum": ""
             },
             "require": {
                 "firebase/php-jwt": "^6.0",
-                "guzzlehttp/guzzle": "^6.2.1|^7.0",
+                "guzzlehttp/guzzle": "^6.5.8||^7.4.5",
                 "guzzlehttp/psr7": "^2.4.5",
                 "php": "^7.4||^8.0",
                 "psr/cache": "^1.0||^2.0||^3.0",
@@ -428,9 +428,9 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.32.1"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.37.1"
             },
-            "time": "2023-10-17T21:13:22+00:00"
+            "time": "2024-04-03T18:41:12+00:00"
         },
         {
             "name": "google/cloud",
@@ -1600,6 +1600,62 @@
                 }
             ],
             "time": "2023-09-10T16:11:14+00:00"
+        },
+        {
+            "name": "kerox/fcm",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ker0x/fcm.git",
+                "reference": "e3e804e0407a10b50df08e006fc7f0ea32e14307"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ker0x/fcm/zipball/e3e804e0407a10b50df08e006fc7f0ea32e14307",
+                "reference": "e3e804e0407a10b50df08e006fc7f0ea32e14307",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.2",
+                "php": ">=7.3.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.5",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kerox\\Fcm\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Romain Monteil",
+                    "email": "monteil.romain@gmail.com",
+                    "homepage": "https://kerox.fr",
+                    "role": "Author"
+                }
+            ],
+            "description": "A PHP library to send push notification through Firebase Cloud Messaging",
+            "homepage": "https://github.com/ker0x/fcm",
+            "keywords": [
+                "FCM",
+                "Firebase Cloud Messaging",
+                "notification",
+                "push"
+            ],
+            "support": {
+                "issues": "https://github.com/ker0x/fcm/issues",
+                "source": "https://github.com/ker0x/fcm/tree/2.4.0"
+            },
+            "time": "2023-05-17T13:13:08+00:00"
         },
         {
             "name": "kreait/firebase-php",
@@ -3490,7 +3546,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "google/cloud": 20,
-        "phpmailer/phpmailer": 20
+        "phpmailer/phpmailer": 20,
+        "nesbot/carbon": 20,
+        "kerox/fcm": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

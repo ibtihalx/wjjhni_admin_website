@@ -8,12 +8,13 @@
         "google/cloud": "dev-main",
         "google/cloud-firestore": "*",
         "google/cloud-core": "*",
-        "google/auth": "^1.32",
+        "google/auth": "^1.37",
         "firebase/php-jwt": "^6.9",
         "kreait/firebase-php": "7.0",
         "psr/http-message": "^1.0.1",
         "phpmailer/phpmailer": "dev-master",
-        "nesbot/carbon": "^3.0@dev"
+        "nesbot/carbon": "^3.0@dev",
+        "kerox/fcm": "2.x-dev"
     },
     "autoload": {
         "psr-4": {
