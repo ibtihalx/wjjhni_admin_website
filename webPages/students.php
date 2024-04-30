@@ -10,10 +10,10 @@ use webPages\models\Firestore;
 $f = new Firestore();
 
 $collection = $f->setCollectionName('students');
-$students = $collection->getAllDocuments();
+$students = $collection->getAlldocumentsOrdered("id");
 
 $collection1 = $f->setCollectionName('academic_advisors');
-$advisors = $collection->getAllDocuments();
+$advisors = $collection->getAlldocuments();
 
 ?>
 
@@ -27,6 +27,7 @@ $advisors = $collection->getAllDocuments();
     <link rel="stylesheet" type="text/css" href="shared.css">
 
     <title>عرض الطالبات </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -38,7 +39,29 @@ $advisors = $collection->getAllDocuments();
         <button id="logout" onclick="window.location.href = 'logout.php';">تسجيل الخروج
             <span><img src="images/logout.svg"></span></button>
     </header>
+    <script>
+        function searchByID() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.querySelector(".continer table");
+            tr = table.getElementsByTagName("tr");
 
+            // Loop through all table rows, and hide those that don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the student ID column
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 
     <div class="bg-continer">
 
@@ -50,8 +73,9 @@ $advisors = $collection->getAllDocuments();
 
             <h1> عرض الطالبات</h1>
             <br>
-
+            <div class="searchDiv" style="height: 50px; margin-left:30%; margin-bottom:16px;"><input type="text" id="searchInput" onkeyup="searchByID()" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
             <div class="continer">
+
                 <table>
                     <tr>
                         <th>
@@ -87,13 +111,13 @@ $advisors = $collection->getAllDocuments();
                         echo '<td class="stu_email">' . $student['email'] . "</td>";
                         echo '<td>' . $student['major'] . "</td>";
                         echo '<td>' . $student['phone'] . "</td>";
-                        $adv="";
-                        foreach ($advisors as $advisor){
-                            if($student["AdvisorUID"]== $advisor["uid"]){
+                        $adv = "";
+                        foreach ($advisors as $advisor) {
+                            if ($student["AdvisorUID"] == $advisor["uid"]) {
                                 $adv = $advisor["name"];
-                            } 
+                            }
                         }
-                        echo '<td>' .$adv. "</td>";
+                        echo '<td>' . $adv . "</td>";
                         echo "</tr>";
                     }
                     ?>

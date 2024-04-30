@@ -679,6 +679,25 @@ font-weight: bolder;
 
 }
 
+#filterCriteria{
+    font-size: medium;
+    direction: rtl;
+    margin-left: 32%;
+    margin-right: 32%;
+    width: 36%;
+    height: 60px;
+    margin-bottom: 16px;
+
+}
+ select#filterCriteria option {
+   
+    height: 60px;
+
+}
+
+
+
+
 /* delete students */
 .delete_hint {
     text-align: center;

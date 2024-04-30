@@ -10,7 +10,7 @@ use webPages\models\Firestore;
 $f = new Firestore();
 $collection = $f->setCollectionName('academic_advisors');
 //retrive all advisors documents
-$advisors = $collection->getAlldocumentsOrdered("department");
+$advisors = $collection->getAlldocumentsOrdered("name");
 
 
 $db_rating = new Firestore();
@@ -23,15 +23,7 @@ $db_rate_check->setDocumentName("activationDocument");
 $doc = $db_rate_check->getData();
 $isActive = $doc['isActive'];
 
-// $notes = array();
 
-// $notes = array_fill_keys($notes, $one_adv);
-// print_r($notes);
-
-
-
-// $rates=$db_rating->getAdvisorRatingsDataByDocumentId("Rcsju1juO7TyPENB3cClsHTiNzW2");
-// print_r(count($rates));
 
 function printStars($rating)
 {
@@ -67,6 +59,7 @@ function printStars($rating)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -123,17 +116,22 @@ function printStars($rating)
                         update: status
                     },
                     success: function(response) {
-                        response = response.trim().toLowerCase();
-                        if (response === "true") {
-                            $('#btn_active').prop("disabled", true);
-                            $('#btn_notActive').prop("disabled", false);
-                            $("#act_text").html("فترة التقييم مفعلة الآن");
+                        if (response !== undefined && response !== null) {
+                            response = response.trim().toLowerCase();
+                            if (response === "true") {
+                                $('#btn_active').prop("disabled", true);
+                                $('#btn_notActive').prop("disabled", false);
+                                $("#act_text").html("فترة التقييم مفعلة الآن");
+                            } else {
+                                $('#btn_notActive').prop("disabled", true);
+                                $('#btn_active').prop("disabled", false);
+                                $("#act_text").html("فترة التقييم غير مفعلة الآن");
+                            }
                         } else {
-                            $('#btn_notActive').prop("disabled", true);
-                            $('#btn_active').prop("disabled", false);
-                            $("#act_text").html("فترة التقييم غير مفعلة الآن");
+                            console.error("Response is undefined or null");
                         }
                     }
+
                 });
             }
 
@@ -151,8 +149,92 @@ function printStars($rating)
     <link rel="stylesheet" type="text/css" href="shared.css">
 
     <title> تقييم المرشدات</title>
+
+
+
+    <script>
+
+    </script>
+
 </head>
 
+<script>
+    $(document).ready(function() {
+        // Event listener for dynamically added .view_notes_btn elements
+        $(document).on("click", ".view_notes_btn", function() {
+            var notes = JSON.parse($(this).val());
+            var adv_name = Object.keys(notes)[0]; // Extract the key
+            $('#name_adv').text(adv_name);
+            // Clear the contents of the .students_notes container
+            $('.students_notes').empty();
+
+            $('<button id="closing_btn">&#10006;</button>').appendTo(".students_notes");
+            $('<h3> ملاحظات عن المرشدة </h3>').appendTo('.students_notes');
+            $('<h4 id="name_adv">' + adv_name + '</h4>').appendTo('.students_notes ');
+
+            // Iterate over each key-value pair in the JSON object
+            Object.entries(notes[adv_name]).forEach(([key, value]) => {
+                // Create a new <div> element for each key-value pair
+                var divElement = $('<div>').addClass('stu_note');
+                $('<br>').appendTo('.students_notes');
+                // Create and append <p> elements for the date and note content
+                var dateElement = $('<p>').text(value + ' :التاريخ ').appendTo(divElement);
+                $('<br>').appendTo(divElement);
+                var noteElement = $('<p>').text(key).appendTo(divElement);
+
+                // Append the new <div> element to the ".students_notes" container
+                $('.students_notes').append(divElement);
+            });
+
+            $(".students_notes").show();
+        });
+
+        // Event listener for select change
+        $("#filterCriteria").change(function() {
+            var selectedOption = $(this).val();
+            // Reorder the table based on the selected option
+            if (selectedOption === "highRate") {
+                // Sort in descending order of general rating
+                var rows = $("table tbody tr").get();
+                rows.sort(function(row1, row2) {
+                    var rating1 = $(row1).find("td:last").text().trim();
+                    var rating2 = $(row2).find("td:last").text().trim();
+                    // Handle "-" rating
+                    if (rating1 === "-") rating1 = -1; // Assign a default value
+                    if (rating2 === "-") rating2 = -1; // Assign a default value
+                    return parseFloat(rating2) - parseFloat(rating1);
+                });
+                $("table tbody").empty().append(rows);
+            } else if (selectedOption === "lowRate") {
+                // Sort in ascending order of general rating
+                var rows = $("table tbody tr").get();
+                rows.sort(function(row1, row2) {
+                    var rating1 = $(row1).find("td:last").text().trim();
+                    var rating2 = $(row2).find("td:last").text().trim();
+                    // Handle "-" rating
+                    if (rating1 === "-") rating1 = 0; // Assign a large value
+                    if (rating2 === "-") rating2 = 0; // Assign a large value
+                    return parseFloat(rating1) - parseFloat(rating2);
+                });
+                $("table tbody").empty().append(rows);
+            }
+        });
+
+        // Search functionality
+        $("#searchInput").on("keyup", function() {
+            var searchText = $(this).val().toLowerCase();
+            $("table tbody tr").each(function() {
+                var advisorName = $(this).find("td:first").text().toLowerCase();
+                if (advisorName.indexOf(searchText) === -1) {
+                    $(this).hide();
+                } else {
+                    $("#table_heads").show();
+                    $(this).show();
+                }
+            });
+        });
+    });
+</script>
 
 <body>
     <header>
@@ -187,18 +269,31 @@ function printStars($rating)
 
 
                 ?>
+
             </div>
+            <div></div>
+
+            <select id="filterCriteria">
+                <option value="all">ترتيب حسب:</option>
+                <option value="highRate">الأعلى تقييما</option>
+                <option value="lowRate">الأقل تقييما</option>
+                <!-- Add more options as needed -->
+
+            </select>
+
 
             <div class="continer">
+                <div class="searchDiv" style="height: 50px;"><input type="text" id="searchInput" placeholder="بحث بالاسم">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
 
                 <table>
-                    <tr>
+                    <tr id="table_heads">
                         <th>اسم المرشدة</th>
                         <th>عدد المقيمات</th>
                         <th>تقييم الدعم والتوجيه</th>
                         <th> تقييم الإلمام بالأنظمة ولوائح الجامعة</th>
                         <th> تقييم التواجد وسرعة الرد</th>
                         <th>ملاحظات الطالبات</th>
+                        <th>التقييم العام</th>
                     </tr>
 
                     <?php
@@ -213,6 +308,7 @@ function printStars($rating)
                             echo " <tr> <td>" . $adv['name'] . "</td>";
                             echo "<td>0</td><td>-</td><td>-</td><td>-</td>";
                             echo "<td> لايوجد" . "</td>";
+                            echo "<td>-</td>";
                             echo "</tr>";
                         } else {
 
@@ -225,15 +321,16 @@ function printStars($rating)
                                 $support_direct_rate += $rate['support_direct_rate'];
                                 $attent_fast_resp += $rate['attent_fast_resp'];
                                 $rules_know += $rate['rules_know'];
-                                if ($rate['studentComment'] != "") {
+                                if ($rate['studentComment'] !== "") {
                                     $comments[$rate['studentComment']] = $rate['addedDate'];
                                 }
-                                $notes = array($adv['name'] => $comments);
                             }
+                            $notes = array($adv['name'] => $comments);
                             // Calculate average ratings
                             $support_direct_rate = $support_direct_rate / $numberOfRatings;
                             $attent_fast_resp = $attent_fast_resp / $numberOfRatings;
                             $rules_know = $rules_know / $numberOfRatings;
+                            $general_rating = ($support_direct_rate + $attent_fast_resp + $rules_know) / 3;
 
                             echo "<td>";
                             echo "<span>" . number_format((float)$support_direct_rate, 2, '.', '') . "/5</span><br>";
@@ -251,6 +348,8 @@ function printStars($rating)
 
                             echo "<td><button class='view_notes_btn' value='" . htmlspecialchars(json_encode($notes), ENT_QUOTES, 'UTF-8') . "'>" .
                                 "عرض الملاحظات</button></td>";
+
+                            echo "<td>" . number_format((float)$general_rating, 2, '.', '') . "/5</td>";
                             echo "</tr>";
                         }
                     }
@@ -262,36 +361,7 @@ function printStars($rating)
                     <h3>ملاحظات عن المرشدة</h3>
                     <h4 id="name_adv">سارة أحمد ناصر</h4>
                     <br>
-                    <!-- <div class="stu_note">
-                        <p>التاريخ:
-                            2024-8-12
-                        </p>
-                        <br>
-                        <p>
-                            مشرفة ممتازة وتضع حلول للخطط
-                        </p>
-                    </div>
-                    <br>
-                    <div class="stu_note">
-                        <p>التاريخ:
-                            2024-8-12
-                        </p>
-                        <br>
-                        <p>
-                            مشرفة ممتازة وتضع حلول للخطط
-                        </p>
-                    </div>
-                    <br>
-                    <div class="stu_note">
-                        <p>التاريخ:
-                            2024-8-12
-                        </p>
-                        <br>
-                        <p>
-                            مشرفة ممتازة وتضع حلول للخطط
-                        </p>
-                    </div>
-                    <br> -->
+
 
                 </div>
 
