@@ -97,12 +97,12 @@ $added=0;
     <div class="bg-continer">
 
 
-        <div class="warper">
+        <div class="warper" style="height: 130%;">
 
             <h1>  المواعيد المهمة </h1>
             <br>
 
-            <div class="continer">
+            <div class="continer" >
 
                 
                                 <div class="forms">
