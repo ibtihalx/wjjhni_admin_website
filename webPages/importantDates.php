@@ -109,6 +109,10 @@ $added=0;
 
                 
                                 <table>
+                                    <th>الاسم</th>
+                                    <th>التاريخ</th>
+                                    <th>تحديد التاريخ</th>
+                                    <th></th>
                    
 
                     <!-- retrive from DB all Date info -->
@@ -122,7 +126,7 @@ $added=0;
                 <td style="width:200px;"><?= $date['Date'] ?></td>
                 <td style="width:200px;"><input type="date" id="selectedDate" name="selectedDate" lang="ar" required></td>
                 <td style="width:150px;"><div class="buttonContainer">
-                        <button type="submit" class="button-1">إضافة</button>
+                        <button type="submit" class="button-1">تحديث</button>
                     </div>
                 </td>
             </tr>

@@ -75,7 +75,7 @@ $all_documents = $firestore->collection('students')->documents();
     <div class="bg-continer">
 
 
-        <div class="warper">
+        <div class="warper" style="height: 115%;">
 
             <h1> إسناد الطالبات </h1>
             <br>
