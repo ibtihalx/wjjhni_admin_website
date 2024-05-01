@@ -141,3 +141,16 @@ export const uploadDocument = async (file_url, name) => {
   console.log("Field 'id' added to the document with ID: ", docRef.id);
 
 };
+
+
+export const notify = async (name) => {
+
+  const currentDate = new Date();
+  const notificationRef = await addDoc(collection(db, "genral_notifcation"), {
+    date : currentDate,
+    message: "تمت إضافة/تحديث خطة "+name ,
+    title: "الخطط الدراسية",
+  });
+  console.log("New notification document written with ID: ", notificationRef.id);
+
+}

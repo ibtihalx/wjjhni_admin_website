@@ -1,4 +1,4 @@
-import { uploadDocument, deletePreviousDocument } from "./firebase.js";
+import { uploadDocument, deletePreviousDocument ,notify} from "./firebase.js";
 
 const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");
 const selectImageBtn = document.getElementById("selectImageBtn");
@@ -69,7 +69,7 @@ const uploadImage = () => {
 
   uploadtask.on(
     "state_changed",
-    (snapshot) => {
+    async (snapshot) => {
       const progress = Math.round(
         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
       );
@@ -79,17 +79,22 @@ const uploadImage = () => {
       console.log("Upload failed", error);
     },
     () => {
-      uploadtask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        console.log("File available at", downloadURL);
-        uploadDocument(downloadURL, document.getElementById("options").value);
-        console.log(downloadURL, "downloadURL");
-        window.location.href = window.location.pathname+"?success=true";
-
-      });
+      (async () => {
+        try {
+          const snapshot = await uploadtask.snapshot;
+          const downloadURL = await snapshot.ref.getDownloadURL();
+          console.log("File available at", downloadURL);
+          await uploadDocument(downloadURL, document.getElementById("options").value);
+          notify(document.getElementById("options").value);
+          console.log(downloadURL, "downloadURL");
+          window.location.href = window.location.pathname+"?success=true";
+        } catch (error) {
+          console.error("Error occurred during upload:", error);
+        }
+      })();
     }
   );
 };
 
 uploadDocumentBtn.onclick = uploadImage;
-
 

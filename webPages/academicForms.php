@@ -25,6 +25,8 @@ $client = new FirestoreClient([
 $collectionRef = $client->collection("academic_forms");
 $documents = $collectionRef->documents();
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +40,8 @@ $documents = $collectionRef->documents();
     <script src="https://www.gstatic.com/firebasejs/8.6.0/firebase-firestore.js"></script>
 
     <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <style>
         .inp {
             display: none;
@@ -190,6 +194,7 @@ $documents = $collectionRef->documents();
                     <tr>
                         <th style="width:350px;">اسم النموذج</th>
                         <th style="width:200px;">تاريخ الإضافة</th>
+                        <th style="width:150px">حذف</th>
                     </tr>
                     <?php 
                         foreach ($documents as $document) {
@@ -200,12 +205,19 @@ $documents = $collectionRef->documents();
                             
                             $data = $document->data();
                             ?>
-                            <tr>
+                            <tr id="<?= $document->id() ?>">
                                 <td> <?= $data['name'] ?></td>
                                 <td> <?= $carbon->format('Y-m-d H:i:s') . PHP_EOL ?> </td>
+                                <td>
+                                        <div class="buttonContainer">
+                                            <button type="submit" class="delete_button" id="delete_btn" ><i class="fa fa-trash" id="trashh" onclick="return deleteRow('<?php echo $document->id() ?>')"> </i></button>
+                                            </button>
+                                        </div>
+                                </td>
                             </tr> 
                              <?php
                         }
+                        
                     ?>
 
 
@@ -221,8 +233,32 @@ $documents = $collectionRef->documents();
 
                 <script type="module" src="./assets/js/firebase.js"></script>
                 <script type="module" src="./assets/js/custom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-                
+                <script>
+                    function deleteRow(id) {
+                        var r = confirm("هل أنت متأكد من الحذف؟");
+                        if (r == true) {
+                            $.ajax({
+                                type: "POST",
+                                data: {
+                                    academic_form: id
+                                },
+                                url: "deleteScript.php",
+                                success: function(msg) {
+                                    if(msg){
+                                        $("tr#" + id).remove();
+
+                                        $("#con_delete_stu").css("display", "block");
+                                        $("#con_text").html("تم الحذف");
+                                    }else{
+                                        alert("حدث خطأ أثناء الحذف");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                </script>
 
 
                 

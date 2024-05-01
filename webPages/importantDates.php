@@ -53,6 +53,22 @@ $added=0;
                             $Date = $collection2->getAllDocuments();
 
                         }
+
+                        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['newTitle'])) {
+                            $newTitle = $_POST['newTitle'];
+                            $newDate = $_POST['newDate'];
+                        
+                            $data3 = [
+                                'Date' => $newDate,
+                                'title' => $newTitle,
+                            ];
+                            $collection = $firestore->collection('ImportantDate');
+                            $collection->add($data3);
+                            $added = 1;
+                        
+                            // Refresh the collection data
+                            $Date = $collection2->getAllDocuments();
+                        }
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +79,7 @@ $added=0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <title> المواعيد المهمة</title>
 </head>
@@ -117,13 +134,26 @@ $added=0;
 
                 </table>
                 
+                <br>
+
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                <div class="row">
+                    <div class="NewDate">
+                        <input type="text" id="newTitle" name="newTitle" placeholder="العنوان" required>
+                    </div>
+                    <div class="d1"><input type="date" name="newDate" lang="ar" required></div>
+                    <div><button id="addDate" type="submit"><i class="fas fa-plus"></i></button> </div>
+                    </div>
+                </form>
+                
 
                 
-                <br><br>
+                <br>
                 <div class="success-message" id="show1">
                     <span class="success-text" id="successmessage">
                     </span>
                 </div>
+                <br>
 
                     </div>
 
@@ -141,7 +171,7 @@ $added=0;
                                 <?PHP
                                     if ($added == 1) {
                                         ?>
-                                var messageFromPHP1 = "تمت إضافة التاريخ بنجاح";
+                                var messageFromPHP1 = "تمت إضافة/تحديث التاريخ بنجاح";
                                 document.getElementById("successmessage").innerHTML = "<p>" + messageFromPHP1 + "</p>";
                                 <?PHP
                                     };

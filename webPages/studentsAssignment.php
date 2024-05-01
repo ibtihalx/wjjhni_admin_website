@@ -11,33 +11,53 @@ putenv('models/wjjhni-firebase-adminsdk-zavwk-30172c8f7e.json');
 $projectId = 'wjjhni';
 $databaseId = '(default)';
 
+// filters
+$studentID = isset($_GET['student_id']) ? $_GET['student_id'] : '';
+$hasAdvisor = isset($_GET['hasAdvisor']) ? $_GET['hasAdvisor'] : '';
+
 use webPages\models\Firestore;
 
 $f = new Firestore();
 $collection = $f->setCollectionName('academic_advisors');
-//retrive all advisors documents
+// Retrieve all advisor documents
 $advisors = $collection->getAllDocuments();
-
-$collection1 = $f->setCollectionName('students');
-$students = $collection1->getAllDocuments();
-
 $firestore = new FirestoreClient([
     'projectId' => $projectId,
     'databaseId' => $databaseId,
 ]);
-$documents = $firestore->collection("students")->documents();
+
+$all_students = $firestore->collection('students');
+
+if (!empty($studentID)) {
+    $all_students = $all_students->where('id', '=', $studentID);
+}
+
+$students = $all_students->documents();
+
+
+
+// Query the Firestore collection for all documents
+$all_documents = $firestore->collection('students')->documents();
+
 ?>
 
 <!DOCTYPE html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="shared.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     
+
+    <link rel="stylesheet" type="text/css" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+    
+
 
     <title>إسناد الطالبات</title>
 </head>
@@ -63,6 +83,20 @@ $documents = $firestore->collection("students")->documents();
             <div class="continer" >
                 <div class="forms">
                     
+                
+                    <div class="searchDiv2">
+                            <input type="text" class="student_id" name="student_id" value="<?php echo $studentID; ?>" id="searchInput2" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input>
+                    </div>
+                    <br> <br>
+                    <div class="searchDiv2">
+    <br>
+    <select name="hasAdvisor" id="filterHasAdvisor">
+        <option value="" > الكل </option>
+        <option value="true" <?php if ($hasAdvisor == 'true') { echo 'selected'; } ?>>عدم وجود مرشدة</option>
+    </select>
+                        </form>
+                    </div>
+                
 
                 <?php
                 $count=0;
@@ -71,88 +105,141 @@ $documents = $firestore->collection("students")->documents();
                     if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     //Retrieve the selected option from the dropdown
                     $selectedOption = isset($_POST["selectedOption"]) ? $_POST["selectedOption"] : '';
+                    $hasAdvisor = isset($_POST["hasAdvisor"]) ? $_POST["hasAdvisor"] : '';
 
-                    //Retrieve the chosen items from the checklist
-                    $chosenChecklistItems = isset($_POST["checklist"]) ? $_POST["checklist"] : array();
+    // Retrieve the chosen items from the checklist
+    $chosenChecklistItems = isset($_POST["checklist"]) ? $_POST["checklist"] : array();
 
-                    //Process the values
-                    //echo "Selected Option: " . $selectedOption . "<br>";
-                    //echo "Chosen Checklist Items: " . implode(", ", $chosenChecklistItems);
-                    $advisorUID = "";
-                    $successMessage = "لم يتم الإسناد, الرجاء المحاولة مرة أخرى";
-                    foreach ($advisors as $advisor) {
-                       if ($advisor['name'] == $selectedOption){
-                           $advisorUID = $advisor['uid'];
-                        }
-                        foreach ($chosenChecklistItems as $student1) {
-                          foreach ($documents as $document){
-                            if ( $student1 == $document['name']){
-                                $count=$count+1;
-                                $successMessage = "تم إسناد الطالبة\الطالبات بنجاح";
-                                
-                                $documentId = $document->id();
-                                $documentRef = $firestore->collection("students")->document($documentId);
-                                $documentRef->update([
-                                   ['path' => 'AdvisorUID', 'value' => $advisorUID]
-                                ]);
-                            }
-                          }
-                        }
-                    };
+    // Process the values
+    $advisorUID = "";
+    $successMessage = "لم يتم الإسناد, الرجاء المحاولة مرة أخرى";
+    foreach ($advisors as $advisor) {
+        if ($advisor['name'] == $selectedOption) {
+            $advisorUID = $advisor['uid'];
+        
+        $count2 =0;
+        foreach ($chosenChecklistItems as $student1) {
+            $count2 = $count2+1;
+            $not = 0;
+            foreach ($all_documents as $document) {
+                $not = $not+1;
+                if ( $document['name'] == $student1) {
+                    $count = $count + 1;
+                    $successMessage = 'تمت إسناد  '.$count.'  طالبة بنجاح';
 
-                    }
-                ?>
-                
-            <div class="error-message" id="show">
-                <span class="error-text" id="errormessage">
-                </span>
-            </div>
-            <div class="success-message" id="show1">
-                <span class="success-text" id="successmessage">
-                </span>
-            </div>
+                    $documentId = $document->id();
+                    $documentRef = $firestore->collection("students")->document($documentId);
+                    $documentRef->update([
+                        ['path' => 'AdvisorUID', 'value' => $advisorUID]
+                    ]);
 
-            <form id="myForm" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                <div class="f1">
-                <div class="dropdown-container">
-                <label for="options">: اختيار مرشدة  -</label>
-                <br>
-                <select id="options" class="dropdown" name="selectedOption">
-                <?php
-                foreach ($advisors as $advisor) {
-                    echo '<option>'.$advisor['name'].'</option>';
+                    $change = "تم تغيير مرشدتك إلى ".$advisor['name'];
+                    $specificNotificationCollection = $firestore->collection('specific_notification');
+                    $specificNotificationData = [
+                        'date' => new \Google\Cloud\Core\Timestamp(new \DateTime()),
+                        'title' => 'تغيير المرشدة الأكاديمية',
+                        'message' => $change ,
+                        'uid' => $document['uid']
+                    ];
+                    $specificNotificationCollection->add($specificNotificationData);
+
                 }
-                ?>
-                </select>
-            </div>
+                
+            }
+            
+        }
+    }
+    }
+
+    $_SESSION['successMessage'] = $successMessage;
+    // Redirect to the same page after form submission
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+$successMessage = isset($_SESSION['successMessage']) ? $_SESSION['successMessage'] : '';
+
+// Clear the session variable
+unset($_SESSION['successMessage']);
+?>
+                
+                <br>
+                <div class="error-message" id="show">
+                    <span class="error-text" id="errormessage">
+                    </span>
+                </div>
+                <div class="success-message" id="show1">
+                    <span class="success-text" id="successmessage">
+                    </span>
+                </div>
+
+                <form id="myForm" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                    <div class="f1">
+                    <div class="dropdown-container">
+                    <label for="options">: اختيار مرشدة  -</label>
+                    <br>
+                    <select id="options" class="dropdown" name="selectedOption">
+                    <?php
+                    foreach ($advisors as $advisor) {
+                        echo '<option>'.$advisor['name'].'</option>';
+                    }
+                    ?>
+                    </select>
+                </div>
 
             
 
-            <br>
-            <label>: اختيار طالبات  -</label>
-            <br>
-        </div>
+                <br>
+                <label>: اختيار طالبات  -</label>
 
+
+
+                
+            </div>
+
+        
+
+        
+        <br>
 
 
             
     
         <div class="f2">
-            <table style="width: 450px;">
+
+        
+            <table id="testinggg" style="width: 450px;">
                 <tr>
                     <th style="width:200px;">الاسم</th>
+                    <th style="width:100px">الرقم الجامعي</th>
+                    <th style="width:150px">المرشدة الأكاديمية</th>
                     <th style="width:50px;">اختيار</th>
                 </tr>
+                <tbody id="dataBody">
                 <?php
                     //get all student info
                     foreach ($students as $student) {
+                        if ($student['AdvisorUID']  && $hasAdvisor == 'true') {
+                            continue;
+                        }
+   
+
                         echo '<tr>';
                         echo '<td>' . $student['name'] . "</td>";
+                        echo '<td>' . $student['id'] . "</td>";
+                        $adv="";
+                        foreach ($advisors as $advisor){
+                            if($student["AdvisorUID"]== $advisor["uid"]){
+                                $adv = $advisor["name"];
+                            } 
+                        }
+                        echo '<td>' .$adv. "</td>";
                         echo '<td> <div class="checkboxContainer"> <label> <input type="checkbox" name="checklist[]" value="'.$student['name'].'"></label></div> '. "</td>";
                         echo "</tr>";
                         
                     }
                     ?>
+                </tbody>
             </table>
             <br>
             <div class="buttonContainer">
@@ -172,27 +259,74 @@ $documents = $firestore->collection("students")->documents();
             </div>
         </div>
         <script>
-            function showSuccessMessage() {
-                const successMessage = "<?php  echo $successMessage; ?>";
-                
-                const successTextElement = document.getElementById("<?php if ( $count > 0 ){ echo 'successmessage'; }  else {  echo 'errormessage'; }?>");
+        // Call the function to show the success message
+        showSuccessMessage();
 
-                if (successMessage) {
-                    successTextElement.innerText = successMessage;
+        function showSuccessMessage() {
+            const successMessage = "<?php echo $successMessage; ?>";
 
-                    document.getElementById("<?php if ( $count > 0 ){ echo 'show1'; }  else {  echo 'show'; }?>").style.display = "block";
-                }
+            if ( successMessage != "لم يتم الإسناد, الرجاء المحاولة مرة أخرى") {
+            const successTextElement = document.getElementById("successmessage");
+            const successMessageContainer = document.getElementById("show1");
+
+            if (successMessage) {
+                successTextElement.innerText = successMessage;
+                successMessageContainer.style.display = "block";
             }
+        } else {
+            const errorTextElement = document.getElementById("errormessage");
+            const errorMessageContainer = document.getElementById("show");
 
-    // Call the function to show the success message
-    showSuccessMessage();
-
+            if (successMessage) {
+                errorTextElement.innerText = successMessage;
+                errorMessageContainer.style.display = "block";
+            }
+        }
+        }
         </script>
         
         <?php
         include('nav.php');
         ?>
     </div>
+        <script>
+        $(document).ready(function() {
+
+            let timer;
+            $('#searchInput2').change(function() {
+                search();
+            });
+
+            $('#filterHasAdvisor').change(function() {
+                search();
+            });
+                
+        });
+
+        function search() {
+            $('button, input').attr('disabled',true);
+           // get search form searialized data
+            var data = {
+                student_id: $('.student_id').val(),
+                hasAdvisor: $('#filterHasAdvisor').val()
+            }
+            // send ajax request
+            $.ajax({
+                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+                method: 'GET',
+                data: data,
+                success: function(response) {
+                    if (response != null) {
+                        $('body').html(response);
+                    }
+
+                },
+                complete: function(response){
+                    $('button, input').attr('disabled',false);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

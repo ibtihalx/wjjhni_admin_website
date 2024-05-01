@@ -9,6 +9,7 @@ import {
   deleteDoc, 
   query, 
   where,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDI6ldQx14IuT_wEDt6Er076im2ukfeRzQ",
@@ -20,8 +21,6 @@ const firebaseConfig = {
   appId: "1:919936662501:web:cc53bfe12ad5580f33cd0c",
   measurementId: "G-DNYPTYJ55N",
 };
-
-
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
@@ -36,19 +35,44 @@ export const deletePreviousDocument = async (name) => {
     console.log("Document deleted with ID: ", doc.id);
   });
 };
+
 // for add data in collection
 export const uploadDocument = async (file_url, name) => {
+  try {
+
+  // هنا تضيفين بدون ال id ثم تعملين تحديث وتضيفيه ؟صحيح لان الاي دي اوتو جينريتد
+  // تمام احنا مبدئيا موقتا هنوقف اعادة تحميل الصفحة عشان نشوف الكونسول
   
   const docRef = await addDoc(collection(db, "academic_forms"), {
-    file_url,
-    name,
+    file_url: file_url,
+    name: name
   });
   console.log("Document written with ID: ", docRef.id);
 
-  await updateDoc(doc(db, "academic_forms", docRef.id), {
-    id: docRef.id,
-  });
+
+  const updatedData = {
+    id: docRef.id
+  };
+
+
+  await setDoc(doc(db, "academic_forms", docRef.id), updatedData, { merge: true });
   console.log("Field 'id' added to the document with ID: ", docRef.id);
 
+} catch (error) {
+  console.error("Error adding document to Firebase:", error);
+}
+  
 };
 
+
+export const notify = async (name) => {
+
+  const currentDate = new Date();
+  const notificationRef = await addDoc(collection(db, "genral_notifcation"), {
+    date : currentDate,
+    message: "تمت إضافة/تحديث نموذج "+name ,
+    title: "النماذج",
+  });
+  console.log("New notification document written with ID: ", notificationRef.id);
+
+}

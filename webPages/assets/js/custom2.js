@@ -1,4 +1,4 @@
-import { uploadDocument, deletePreviousDocument } from "./firebase2.js";
+import { uploadDocument, deletePreviousDocument, notify } from "./firebase2.js";
 
 const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");
 const selectImageBtn = document.getElementById("selectImageBtn");
@@ -79,12 +79,26 @@ const uploadImage = () => {
       console.log("Upload failed", error);
     },
     () => {
-      uploadtask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        console.log("File available at", downloadURL);
-        uploadDocument(downloadURL, document.getElementById("options").value);
-        console.log(downloadURL, "downloadURL");
-        window.location.href = window.location.pathname+"?success=true";
-      });
+      // uploadtask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+      //   console.log("File available at", downloadURL);
+      //   uploadDocument(downloadURL, document.getElementById("options").value);
+      //   notify( document.getElementById("options").value );
+      //   console.log(downloadURL, "downloadURL");
+      //   window.location.href = window.location.pathname+"?success=true";
+      // });
+      (async () => {
+        try {
+          const snapshot = await uploadtask.snapshot;
+          const downloadURL = await snapshot.ref.getDownloadURL();
+          console.log("File available at", downloadURL);
+          await uploadDocument(downloadURL, document.getElementById("options").value);
+          notify(document.getElementById("options").value);
+          console.log(downloadURL, "downloadURL");
+          window.location.href = window.location.pathname+"?success=true";
+        } catch (error) {
+          console.error("Error occurred during upload:", error);
+        }
+      })();
     }
   );
 };

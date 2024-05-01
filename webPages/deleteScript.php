@@ -45,3 +45,30 @@ $student->update([['path' => 'AdvisorUID', 'value' => '']]);
     echo ($count);
 }
 
+if (isset($_POST['academic_form'])) {
+
+    try{
+        $f = new Firestore();
+        $collection = $f->setCollectionName('academic_forms');
+        $selectedForms = $_POST['academic_form'];
+        $f->deleteDocumentsByFieldValue("id", $selectedForms);
+        echo true;
+    }catch(Exception $e){
+        echo false;
+    }
+}
+
+if (isset($_POST['plans']) && isset($_POST['course'])) {
+    try{
+        $f = new Firestore();
+        // deleted nested course by id from the plan collection
+        $collection = $f->setCollectionName('plans');
+        $selectedPlans = $_POST['plans'];
+        $selectedCourse = $_POST['course'];
+        $f->deleteNestedDocumentByFieldValue("plans", $selectedPlans, "courses", "id", $selectedCourse);
+        echo true;
+    }catch(Exception $e){
+        echo false;
+    }
+}
+

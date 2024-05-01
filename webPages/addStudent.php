@@ -183,10 +183,15 @@ $firestore = new FirestoreClient([
                                     // Insert data into Firestore with auto-generated document ID
                                     $collection = $firestore->collection('students');
 
+                                    
+
                                     if (isset($data[2]) && isset($data[3])) {
                                         // $data[$columnIndex] contains the value of the desired column
                                         $columnValue = $data[2];
                                         $columnValue1 = $data[3];
+
+                                        if ($data[3] != "") {
+                                        
 
                                         //check if a user already exists by email
                                         if ((!$f->checkDocumentExists('email', $columnValue)) && !$f->checkDocumentExists('id', $columnValue1)) {
@@ -211,6 +216,11 @@ $firestore = new FirestoreClient([
                                             }
                                         }
                                     }
+                                    
+                                    }
+                                
+                                
+                                
                                 }
                             } else {
                                 $added = 2;

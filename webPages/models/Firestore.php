@@ -306,4 +306,30 @@ get all data or some key
             return [];
         }
     }
+
+    public function deleteNestedDocumentByFieldValue(string $collectionName, string $documentId, string $subcollectionName, string $fieldName, $fieldValue){
+        try{
+            // Code to delete nested document by field value
+            $documentRef = $this->firestore->collection($collectionName)->document($documentId);
+            
+            $subcollectionRef = $documentRef->collection($subcollectionName);
+
+            $query = $subcollectionRef->where($fieldName, '=', $fieldValue);
+
+            $documents = $query->documents();
+
+            foreach ($documents as $document) {
+                $document->reference()->delete();
+            }
+
+            
+
+            return true;
+
+        } catch (\Google\ApiCore\ApiException $e) {
+            return $e->getMessage();
+        }
+            
+
+    }    
 }

@@ -114,6 +114,7 @@ $firestore = new FirestoreClient([
                     </script>
 
                     <?php
+                    
                     $added = 0;
                     $num= 0;
                     if (isset($_FILES['file'])) {
@@ -181,6 +182,8 @@ $firestore = new FirestoreClient([
                                         // $data[$columnIndex] contains the value of the desired column
                                         $columnValue = $data[2];
 
+                                        if ($data[3] != "") {
+
                                         //check if a user already exists by email
                                         if (!$f->checkDocumentExists('email', $columnValue)) {
 
@@ -202,6 +205,7 @@ $firestore = new FirestoreClient([
                                             } catch (Kreait\Firebase\Exception\Auth\EmailExists $e) {
                                             }
                                         }
+                                    }
                                     }
                                 }
                             } else {
