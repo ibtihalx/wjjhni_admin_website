@@ -38,6 +38,27 @@ $firestore = new FirestoreClient([
 
     <link rel="stylesheet" type="text/css" href="shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+    }
+</style>
 
     <title>إضافة الطالبات</title>
 </head>
@@ -78,7 +99,15 @@ $firestore = new FirestoreClient([
                             <button type="submit" name="download_csv_form1" class="button-1">تحميل نموذج</button>
                         </div>
                     </form>
-                    <br><br>
+
+
+                    <br>
+                    
+                    <div class="loading-panel" id="loadingPanel">
+                        <div class="loading-spinner"></div>
+                    </div>
+    
+    <br>
                     <form action="" method="post" enctype="multipart/form-data" id="stu_file">
                         <p id="file_hint">
                             يجب أن تكون صيغة الملف
@@ -92,7 +121,7 @@ $firestore = new FirestoreClient([
                         </label><br>
                         <div id="uploaded"></div>
                         <br>
-                        <input type="submit" value="أضف +" class="custom-file-upload">
+                        <input type="submit" value="أضف +" class="custom-file-upload" id="addButton">
                         <br>
 
                         <div class="error-message" id="show">
@@ -106,6 +135,13 @@ $firestore = new FirestoreClient([
 
 
                     </form>
+
+                    <div id="loadingOverlay" class="loading-overlay"></div>
+
+                <!-- Loading spinner -->
+                <div id="loadingSpinner" class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin fa-5x"></i>
+                </div>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
                         $(document).ready(function() {
@@ -114,6 +150,17 @@ $firestore = new FirestoreClient([
                                     document.getElementById("uploaded").innerHTML = "تم اختيار ملف, الرجاء الضغط على ’أضف’";
                                 }
                             });
+                        });
+
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.getElementById('addButton').addEventListener('click', function() {
+                                showLoading();
+                            });
+
+                            function showLoading() {
+                                document.getElementById('loadingOverlay').style.display = 'block';
+                                document.getElementById('loadingSpinner').style.display = 'block';
+                            }
                         });
                     </script>
 
@@ -190,7 +237,7 @@ $firestore = new FirestoreClient([
                                         $columnValue = $data[2];
                                         $columnValue1 = $data[3];
 
-                                        if ($data[3] != "") {
+                                        if ($data[3] != "" && $data[2] != "") {
                                         
 
                                         //check if a user already exists by email
