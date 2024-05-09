@@ -112,10 +112,32 @@ $documents = $collectionRef->documents();
             margin: 10px 0;
         }
 
-
-
-        .loading {
+        .loading2 {
             display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            color: #375E98;
+            font-size: 45px;
+        }
+        .loading2.show {
+            display: block;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+        }
+
+        .loading-overlay.show {
+            display: block;
         }
     </style>
 
@@ -140,8 +162,10 @@ $documents = $collectionRef->documents();
             <br>
 
             <div class="continer">
-
-                <span class="loading"></span>
+            <div class="loading-overlay"></div>
+                <div class="loading2">
+    <i class="fa fa-spinner fa-spin"></i>
+</div>
 
                 <div class="forms">
                     <div>

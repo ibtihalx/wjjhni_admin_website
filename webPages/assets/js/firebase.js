@@ -40,9 +40,6 @@ export const deletePreviousDocument = async (name) => {
 export const uploadDocument = async (file_url, name) => {
   try {
 
-  // هنا تضيفين بدون ال id ثم تعملين تحديث وتضيفيه ؟صحيح لان الاي دي اوتو جينريتد
-  // تمام احنا مبدئيا موقتا هنوقف اعادة تحميل الصفحة عشان نشوف الكونسول
-  
   const docRef = await addDoc(collection(db, "academic_forms"), {
     file_url: file_url,
     name: name

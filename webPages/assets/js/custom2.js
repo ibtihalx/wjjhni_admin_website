@@ -23,6 +23,8 @@ var storage = firebase.storage();
 const inp = document.querySelector(".inp");
 const fileData = document.querySelector(".filedata");
 const loading = document.querySelector(".loading");
+const loadingPanel = document.querySelector(".loading2");
+const loadingOverlay = document.querySelector(".loading-overlay");
 let file;
 let fileName;
 let isLoading = false;
@@ -62,7 +64,8 @@ var URL = "";
 
 const uploadImage = () => {
   deletePreviousDocument(document.getElementById("options").value);
-  loading.style.display = "block";
+  loadingOverlay.classList.add("show");
+  loadingPanel.classList.add("show");
   const storageRef = storage.ref().child("plans");
   const fileRef = storageRef.child(fileName);
   const uploadtask = fileRef.put(file);
@@ -97,6 +100,9 @@ const uploadImage = () => {
           window.location.href = window.location.pathname+"?success=true";
         } catch (error) {
           console.error("Error occurred during upload:", error);
+        } finally {
+          loadingPanel.classList.remove("show");
+          loadingOverlay.classList.remove("show");
         }
       })();
     }

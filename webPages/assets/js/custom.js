@@ -5,6 +5,7 @@ const selectImageBtn = document.getElementById("selectImageBtn");
 const getImageDataInput = document.getElementById("getImageDataInput");
 const options = document.getElementById("options");
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDI6ldQx14IuT_wEDt6Er076im2ukfeRzQ",
   authDomain: "wjjhni.firebaseapp.com",
@@ -23,6 +24,8 @@ var storage = firebase.storage();
 const inp = document.querySelector(".inp");
 const fileData = document.querySelector(".filedata");
 const loading = document.querySelector(".loading");
+const loadingPanel = document.querySelector(".loading2");
+const loadingOverlay = document.querySelector(".loading-overlay");
 let file;
 let fileName;
 let isLoading = false;
@@ -62,7 +65,8 @@ var URL = "";
 
 const uploadImage = () => {
   deletePreviousDocument(document.getElementById("options").value);
-  loading.style.display = "block";
+  loadingOverlay.classList.add("show");
+  loadingPanel.classList.add("show");
   const storageRef = storage.ref().child("MyForms");
   const fileRef = storageRef.child(fileName);
   const uploadtask = fileRef.put(file);
@@ -90,6 +94,9 @@ const uploadImage = () => {
           window.location.href = window.location.pathname+"?success=true";
         } catch (error) {
           console.error("Error occurred during upload:", error);
+        }  finally {
+          loadingPanel.classList.remove("show");
+          loadingOverlay.classList.remove("show");
         }
       })();
     }
