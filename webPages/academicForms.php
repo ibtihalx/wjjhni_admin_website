@@ -191,6 +191,7 @@ $documents = $collectionRef->documents();
                             <option>طلب إصدار وثيقة</option>
                             <option>قائمة الطلاب المحرومين</option>
                             <option>طرح مقررات الفصل الصيفي</option>
+                            <option>حذف مقرر صفري</option>
                         </select>
                         <br>
                         <br><span class="filedata"></span>
