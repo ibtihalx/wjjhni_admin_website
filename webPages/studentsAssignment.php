@@ -39,6 +39,7 @@ $students = $all_students->documents();
 // Query the Firestore collection for all documents
 $all_documents = $firestore->collection('students')->documents();
 
+
 ?>
 
 <!DOCTYPE html>
@@ -75,7 +76,7 @@ $all_documents = $firestore->collection('students')->documents();
     <div class="bg-continer">
 
 
-        <div class="warper" style="height: 115%;">
+        <div class="warper" style="height: 110%;">
 
             <h1> إسناد الطالبات </h1>
             <br>
@@ -96,6 +97,8 @@ $all_documents = $firestore->collection('students')->documents();
     </select>
                         </form>
                     </div>
+                    <br>
+                    <div class="student-id-error" style="color: red; display: none;">الرجاء إدخال رقم جامعي صحيح مكوّن من ثمانية أرقام</div>
                 
 
                 <?php
@@ -250,6 +253,7 @@ unset($_SESSION['successMessage']);
                 
         </form>
         
+        
                 </div>
 
 
@@ -294,7 +298,10 @@ unset($_SESSION['successMessage']);
 
             let timer;
             $('#searchInput2').change(function() {
-                search();
+                clearTimeout(timer);
+                timer = setTimeout(function() {
+                    search();
+                }, 500);
             });
 
             $('#filterHasAdvisor').change(function() {
@@ -304,28 +311,56 @@ unset($_SESSION['successMessage']);
         });
 
         function search() {
-            $('button, input').attr('disabled',true);
-           // get search form searialized data
-            var data = {
-                student_id: $('.student_id').val(),
-                hasAdvisor: $('#filterHasAdvisor').val()
-            }
-            // send ajax request
-            $.ajax({
-                url: '<?php echo $_SERVER['PHP_SELF']; ?>',
-                method: 'GET',
-                data: data,
-                success: function(response) {
-                    if (response != null) {
-                        $('body').html(response);
-                    }
+            $('button').attr('disabled', true);
+    var studentId = $('.student_id').val();
 
-                },
-                complete: function(response){
-                    $('button, input').attr('disabled',false);
+    // Validate the student_id input
+    if (studentId.length === 0) {
+        $('.student-id-error').hide();
+        showAllRows();
+    } else if (!/^\d{9}$/.test(studentId)) {
+        $('.student-id-error').show();
+    } else {
+        $('.student-id-error').hide();
+
+        var data = {
+            student_id: studentId,
+            hasAdvisor: $('#filterHasAdvisor').val()
+        };
+
+        $.ajax({
+            url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+            method: 'GET',
+            data: data,
+            success: function(response) {
+                if (response != null) {
+                    $('body').html(response);
                 }
-            });
+            },
+            complete: function(response) {
+                $('button').attr('disabled', false);
+            }
+        });
+    }
         }
+
+        function showAllRows() {
+    $.ajax({
+        url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+        method: 'GET',
+        data: {
+            showAll: true
+        },
+        success: function(response) {
+            if (response != null) {
+                $('body').html(response);
+            }
+        },
+        complete: function(response) {
+            $('button').attr('disabled', false);
+        }
+    });
+}
     </script>
 </body>
 

@@ -220,18 +220,30 @@ function printStars($rating)
             }
         });
 
+
+        var noResultsMessage = $("<tr id='noResultsRow'><td colspan='7'>لا توجد نتائج</td></tr>");
         // Search functionality
         $("#searchInput").on("keyup", function() {
             var searchText = $(this).val().toLowerCase();
+            var resultFound = false;
             $("table tbody tr").each(function() {
                 var advisorName = $(this).find("td:first").text().toLowerCase();
                 if (advisorName.indexOf(searchText) === -1) {
                     $(this).hide();
                 } else {
-                    $("#table_heads").show();
                     $(this).show();
+                    resultFound = true;
                 }
             });
+            if (!resultFound && searchText.length > 0) {
+            $("#table_heads").hide();
+            if ($("#noResultsRow").length === 0) {
+                $("table").append(noResultsMessage); // Append the message if no results are found
+            }
+        } else {
+            $("#table_heads").show();
+            $("#noResultsRow").remove(); // Remove the message if results are found or the search text is empty
+        }
         });
     });
 </script>

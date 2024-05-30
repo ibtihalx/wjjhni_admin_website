@@ -41,26 +41,66 @@ $advisors = $collection->getAlldocuments();
     </header>
     <script>
         function searchByID() {
-            // Declare variables
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.querySelector(".continer table");
-            tr = table.getElementsByTagName("tr");
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
 
-            // Loop through all table rows, and hide those that don't match the search query
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the student ID column
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
+    // Validate the input to be a 9-digit number
+    if (filter.length === 0) {
+        // Show all rows if the input is empty
+        showAllRows();
+        return;
+    } else if (!/^\d{9}$/.test(filter)) {
+        // Display an error message
+        var message = document.getElementById("noResultsMessage");
+        message.textContent = "الرجاء إدخال رقم جامعي صحيح مكوّن من ثمانية أرقام";
+        message.style.display = "block";
+        return;
+    } else {
+        // Hide the error message
+        var message = document.getElementById("noResultsMessage");
+        message.style.display = "none";
+    }
+
+    table = document.querySelector(".continer table");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those that don't match the search query
+    var hasVisibleRows = false;
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the student ID column
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                hasVisibleRows = true;
+            } else {
+                tr[i].style.display = "none";
             }
         }
+    }
+
+    message = document.getElementById("noResultsMessage");
+    if (!hasVisibleRows) {
+        message.textContent = "لا يوجد نتيجة";
+        message.style.display = "block";
+    } else {
+        message.style.display = "none";
+    }
+}
+
+function showAllRows() {
+    var table = document.querySelector(".continer table");
+    var tr = table.getElementsByTagName("tr");
+
+    for (var i = 0; i < tr.length; i++) {
+        tr[i].style.display = "";
+    }
+
+    var message = document.getElementById("noResultsMessage");
+    message.style.display = "none";
+}
     </script>
 
     <div class="bg-continer">
@@ -74,7 +114,15 @@ $advisors = $collection->getAlldocuments();
             <h1> عرض الطالبات</h1>
             <br>
             <div class="searchDiv" style="height: 50px; margin-left:30%; margin-bottom:16px;"><input type="text" id="searchInput" onkeyup="searchByID()" placeholder="بحث بالرقم الجامعي">&nbsp;<i class="fa fa-search" aria-hidden="true" style="color:#375E98;"></i></input></div>
+            
+            <div id="noResultsMessage" style="display: none; text-align: center; margin-top: 20px; font-weight: bold; color: red;">
+                لا يوجد نتيجة
+            </div>
+            <br>
             <div class="continer">
+
+
+            
 
                 <table>
                     <tr>
