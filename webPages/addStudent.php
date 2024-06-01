@@ -114,6 +114,9 @@ $firestore = new FirestoreClient([
                             "csv."
 
                         </p>
+<br>
+                        <p style="color:red;">*ملاحظة* لن تتم إضافة الطالبات بدون رقم جامعي وبريد
+</p>
 
                         <br>
                         <label for="fileInput" class="custom-file-upload">تحميل ملف

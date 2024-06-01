@@ -105,7 +105,12 @@ $firestore = new FirestoreClient([
                             يجب أن تكون صيغة الملف
                             "csv."
 
-                        </p><br>
+                        </p>
+                        
+                        <br>
+                        <p style="color:red;">*ملاحظة* لن تتم إضافة المرشدات بدون رقم جامعي وبريد
+</p><br>
+
                         <label for="fileInput" class="custom-file-upload">تحميل ملف
                             <input type="file" name="file" accept=".csv" id="fileInput" style="display:none;">
                         </label><br>
